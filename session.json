@@ -6,7 +6,7 @@
   "currentStep": 1,
   "status": "active",
   "createdAt": "2026-03-18T21:10:08.873Z",
-  "updatedAt": "2026-03-18T21:28:08.242Z",
+  "updatedAt": "2026-03-18T21:41:30.057Z",
   "steps": {
     "1": {
       "status": "approved",
@@ -52,10 +52,18 @@
           {
             "id": "em-dash-api-reference.md",
             "description": "docs/api-reference.md contains em dash characters"
+          },
+          {
+            "id": "em-dash-architecture.md",
+            "description": "docs/architecture.md contains em dash characters"
+          },
+          {
+            "id": "em-dash-getting-started.md",
+            "description": "docs/getting-started.md contains em dash characters"
           }
         ],
         "judgments": [],
-        "approved": 12
+        "approved": 10
       }
     }
   }
