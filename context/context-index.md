@@ -2,9 +2,15 @@
 
 ## Overview
 
-Skyvern is an open-source browser automation platform that uses LLMs and computer vision to automate browser-based workflows. It provides both a Python library (Playwright-compatible SDK with AI capabilities), a TypeScript SDK, a web API, and a web UI for workflow creation and management. The project includes a backend (Python/FastAPI), a frontend (React/TypeScript), and database models (PostgreSQL + SQLAlchemy).
+Skyvern is an open-source browser automation platform that uses large language models (LLMs) and computer vision to automate browser-based workflows — eliminating the need for hand-written CSS selectors or XPath. Instead of brittle DOM queries, Skyvern's agent analyses live screenshots, reasons about page structure, and issues Playwright actions autonomously.
 
-**Core Stack**: Python 3.11+, FastAPI, SQLAlchemy, Playwright, LiteLLM, Pydantic, PostgreSQL, React, TypeScript, Vite
+The platform ships as four integrated surfaces: a **Python SDK** (Playwright-compatible with AI capabilities), a **TypeScript SDK**, a **REST/WebSocket API** (FastAPI backend), and a **web UI** (React/Vite) for building and monitoring workflows. Tasks and workflows are persisted in PostgreSQL via SQLAlchemy async ORM, and browser sessions are managed through Playwright on Chromium.
+
+Skyvern supports multiple LLM providers (OpenAI, Anthropic/Claude, Google Vertex AI) through LiteLLM, making it possible to swap providers via environment variables. It is designed for multi-tenant SaaS use: every task, workflow, credential, and session is scoped to an `organization_id` enforced at both the API and database layers.
+
+Primary use cases include automated form filling, data extraction, login flows, and multi-step web workflows that would otherwise require manual effort or fragile DOM scripting.
+
+**Core Stack**: Python 3.11+, FastAPI, SQLAlchemy (async), Playwright, LiteLLM, Pydantic v2, PostgreSQL, Alembic, React 18, TypeScript, Vite
 
 ---
 
