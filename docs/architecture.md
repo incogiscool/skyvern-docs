@@ -48,7 +48,7 @@ The API layer accepts requests and routes them to either the **Agent Core** (for
 
 ## The ForgeApp: one shared runtime
 
-All services share a single `ForgeApp` instance (defined in `forge/forge_app.py`). It holds references to every major subsystem — the database, storage backend, artifact manager, browser manager, LLM handlers, and workflow service. Think of it as a dependency injection container that gets initialized once when the server starts.
+All services share a single `ForgeApp` instance (defined in `forge/forge_app.py`). It holds references to every major subsystem - the database, storage backend, artifact manager, browser manager, LLM handlers, and workflow service. Think of it as a dependency injection container that gets initialized once when the server starts.
 
 ```python
 # forge/__init__.py
@@ -90,7 +90,7 @@ When you `POST /api/v1/run/tasks`, here's what happens step by step:
 11. Webhook fired (if webhook_url was provided)
 ```
 
-The agent doesn't pre-plan the whole task. It reasons one screenshot at a time, which is why it can handle pages it's never seen before — it has no hardcoded selectors to break.
+The agent doesn't pre-plan the whole task. It reasons one screenshot at a time, which is why it can handle pages it's never seen before - it has no hardcoded selectors to break.
 
 Each loop iteration is a **Step**. Steps are persisted individually so you can inspect exactly what the agent did and why.
 
@@ -157,7 +157,7 @@ Each action the agent takes is a step. Steps belong to a task and are stored in 
 
 ### Workflow and WorkflowRun
 
-A `Workflow` is the template — it stores the block definitions and parameter schema. A `WorkflowRun` is one execution of that template with specific inputs. The same workflow can run many times with different parameters.
+A `Workflow` is the template - it stores the block definitions and parameter schema. A `WorkflowRun` is one execution of that template with specific inputs. The same workflow can run many times with different parameters.
 
 ### Artifact
 
@@ -169,7 +169,7 @@ Every screenshot, HTML snapshot, downloaded file, or extracted CSV is an `Artifa
 
 Skyvern uses **LiteLLM** as a unified interface to every LLM provider. The `LLMConfigRegistry` maps named keys (like `OPENAI_GPT4O`, `ANTHROPIC_CLAUDE3.5_SONNET`) to provider-specific configurations. The primary model is set via the `LLM_KEY` environment variable.
 
-The `ForgeApp` actually holds multiple LLM handlers — a primary one for general reasoning, and specialized handlers for specific tasks like element selection (`SELECT_AGENT_LLM_KEY`) and data extraction (`EXTRACTION_LLM_KEY`). Each can point to a different model, letting you balance cost and capability per task type.
+The `ForgeApp` actually holds multiple LLM handlers - a primary one for general reasoning, and specialized handlers for specific tasks like element selection (`SELECT_AGENT_LLM_KEY`) and data extraction (`EXTRACTION_LLM_KEY`). Each can point to a different model, letting you balance cost and capability per task type.
 
 ---
 
@@ -177,9 +177,9 @@ The `ForgeApp` actually holds multiple LLM handlers — a primary one for genera
 
 Artifacts (screenshots, files, etc.) can be stored in three places:
 
-- **Local filesystem** (`SKYVERN_STORAGE_TYPE=local`) — default for development
-- **AWS S3** (`SKYVERN_STORAGE_TYPE=s3cloud`) — recommended for production
-- **Azure Blob Storage** (`SKYVERN_STORAGE_TYPE=azureblob`) — for Azure deployments
+- **Local filesystem** (`SKYVERN_STORAGE_TYPE=local`) - default for development
+- **AWS S3** (`SKYVERN_STORAGE_TYPE=s3cloud`) - recommended for production
+- **Azure Blob Storage** (`SKYVERN_STORAGE_TYPE=azureblob`) - for Azure deployments
 
 The storage backend is abstracted behind a `BaseStorage` protocol, so switching is a configuration change, not a code change.
 
@@ -199,7 +199,7 @@ Traditional automation relies on XPath or CSS selectors, which break whenever a 
 
 **Why steps instead of a single LLM call?**
 
-Complex tasks require many actions. Breaking them into steps lets the agent observe the result of each action before deciding what to do next. It also makes debugging tractable — you can look at step 4's screenshot and see exactly what the agent saw when it made a wrong decision.
+Complex tasks require many actions. Breaking them into steps lets the agent observe the result of each action before deciding what to do next. It also makes debugging tractable - you can look at step 4's screenshot and see exactly what the agent saw when it made a wrong decision.
 
 **Why PostgreSQL instead of an in-memory store?**
 
