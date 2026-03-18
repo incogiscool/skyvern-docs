@@ -6,7 +6,7 @@
   "currentStep": 1,
   "status": "active",
   "createdAt": "2026-03-18T21:10:08.873Z",
-  "updatedAt": "2026-03-18T21:19:25.168Z",
+  "updatedAt": "2026-03-18T21:20:05.543Z",
   "steps": {
     "1": {
       "status": "approved",
@@ -27,6 +27,39 @@
         ],
         "judgments": [],
         "approved": 28
+      }
+    },
+    "2": {
+      "status": "idle",
+      "report": {
+        "blocking": [
+          {
+            "id": "missing-page-**Guides**.md",
+            "description": "Page listed in proposal not found in docs/: **Guides**.md"
+          },
+          {
+            "id": "missing-page-**Explanations**.md",
+            "description": "Page listed in proposal not found in docs/: **Explanations**.md"
+          },
+          {
+            "id": "missing-page-**References**.md",
+            "description": "Page listed in proposal not found in docs/: **References**.md"
+          },
+          {
+            "id": "missing-nav-json",
+            "description": "docs/nav.json does not exist"
+          },
+          {
+            "id": "em-dash-architecture.md",
+            "description": "docs/architecture.md contains em dash characters"
+          },
+          {
+            "id": "em-dash-getting-started.md",
+            "description": "docs/getting-started.md contains em dash characters"
+          }
+        ],
+        "judgments": [],
+        "approved": 7
       }
     }
   }
