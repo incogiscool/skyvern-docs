@@ -48,20 +48,20 @@ The API layer accepts requests and routes them to either the **Agent Core** (for
 
 ## The ForgeApp: one shared runtime
 
-All services share a single `ForgeApp` instance (defined in `forge/forge_app.py`). It holds references to every major subsystem - the database, storage backend, artifact manager, browser manager, LLM handlers, and workflow service. Think of it as a dependency injection container that gets initialized once when the server starts.
+All services share a single `ForgeApp` instance defined in `forge/forge_app.py`. It holds references to every major subsystem: the database, storage backend, artifact manager, browser manager, LLM handlers, and workflow service. Think of it as a dependency-injection container that initializes once when the server starts.
 
 ```python
 # forge/__init__.py
 app: ForgeApp  # global singleton
 ```
 
-Anywhere in the codebase that needs, say, the database or a specific LLM handler imports `from skyvern.forge import app` and accesses `app.DATABASE` or `app.LLM_API_HANDLER`.
+Anywhere in the codebase that needs, say, the database or an LLM handler, imports `from skyvern.forge import app` and accesses `app.DATABASE` or `app.LLM_API_HANDLER`.
 
 ---
 
 ## How a task executes
 
-When you `POST /api/v1/run/tasks`, here's what happens step by step:
+When you `POST /api/v1/run/tasks`, here is what happens step by step:
 
 ```
 1. API receives TaskRunRequest
@@ -90,39 +90,37 @@ When you `POST /api/v1/run/tasks`, here's what happens step by step:
 11. Webhook fired (if webhook_url was provided)
 ```
 
-The agent doesn't pre-plan the whole task. It reasons one screenshot at a time, which is why it can handle pages it's never seen before - it has no hardcoded selectors to break.
-
-Each loop iteration is a **Step**. Steps are persisted individually so you can inspect exactly what the agent did and why.
+The agent doesn't pre-plan the whole task. It reasons one screenshot at a time, which is how it can handle pages it has never seen before — there are no hardcoded selectors to break. Each loop iteration is a **Step**, persisted individually so you can inspect exactly what the agent did and why.
 
 ---
 
 ## How a workflow executes
 
-A workflow is a DAG (directed acyclic graph) of **blocks**. The `WorkflowService` iterates through them in order, passing outputs from one block as inputs to the next.
+A workflow is a sequence of **blocks**. The `WorkflowService` iterates through them in order, passing outputs from one block as inputs to the next.
 
 ```
 WorkflowRun created with input parameters
          ↓
-   For each block in order:
+   For each block in sequence:
          ↓
-   ┌──────────────────────────────────────┐
-   │  ActionBlock   → creates a Task,     │
-   │                  waits for result    │
-   │  ValidationBlock → evaluates a       │
-   │                    criterion, may    │
-   │                    branch or stop    │
-   │  ForLoopBlock  → runs child blocks   │
-   │                  N times             │
-   │  TextPromptBlock → calls LLM,        │
-   │                    stores output     │
-   │  HttpRequestBlock → makes HTTP call  │
-   │  ... (15+ block types total)         │
-   └──────────────────────────────────────┘
+   ┌──────────────────────────────────────────────┐
+   │  ActionBlock     → creates a Task,            │
+   │                    waits for completion       │
+   │  ValidationBlock → evaluates a criterion,     │
+   │                    may branch or stop early   │
+   │  ForLoopBlock    → runs child blocks N times  │
+   │  TextPromptBlock → calls LLM directly,        │
+   │                    stores response as output  │
+   │  HttpRequestBlock → makes an HTTP call        │
+   │  NavigationBlock, LoginBlock, ExtractionBlock │
+   │  CodeBlock, SendEmailBlock, FileDownloadBlock │
+   │  ConditionalBlock, WaitBlock, ... (25+ types) │
+   └──────────────────────────────────────────────┘
          ↓
    WorkflowRun completed, webhook fired
 ```
 
-Blocks share state through a `WorkflowRunContext`. When an `ActionBlock` finishes, its extracted output is stored in the context under a named `OutputParameter`, and downstream blocks can reference it with Jinja-style template syntax like `{{ output_1.product_price }}`.
+Blocks share state through a `WorkflowRunContext`. When an `ActionBlock` finishes, its extracted output is stored in the context under a named `OutputParameter`. Downstream blocks can reference it with Jinja-style template syntax like `{{ output_1.product_price }}`.
 
 ---
 
@@ -130,15 +128,15 @@ Blocks share state through a `WorkflowRunContext`. When an `ActionBlock` finishe
 
 ### Task
 
-A task is the fundamental unit of work. It lives in the `tasks` table.
+A task is the fundamental unit of work, stored in the `tasks` table.
 
 | Field | Purpose |
 |---|---|
-| `task_id` | Unique identifier (e.g., `tsk_abc123`) |
+| `task_id` | Unique identifier |
 | `url` | Starting URL |
 | `navigation_goal` | What to achieve (natural language) |
 | `data_extraction_goal` | What data to pull out |
-| `navigation_payload` | Contextual input (form values, etc.) |
+| `navigation_payload` | Contextual input (form values, credentials, etc.) |
 | `extracted_information` | The final output, as JSON |
 | `status` | `QUEUED` → `RUNNING` → `COMPLETED` / `FAILED` / `TERMINATED` |
 
@@ -150,44 +148,44 @@ Each action the agent takes is a step. Steps belong to a task and are stored in 
 |---|---|
 | `step_id` | Unique identifier |
 | `order` | Sequential position within the task |
-| `output` | What happened (action taken, response) |
+| `output` | Action taken and its result |
 | `input_token_count` | LLM tokens consumed on input |
 | `output_token_count` | LLM tokens consumed on output |
 | `status` | `SUCCESS` or `FAILED` |
 
 ### Workflow and WorkflowRun
 
-A `Workflow` is the template - it stores the block definitions and parameter schema. A `WorkflowRun` is one execution of that template with specific inputs. The same workflow can run many times with different parameters.
+A `Workflow` is the template — it stores block definitions and a parameter schema. A `WorkflowRun` is one execution of that template with specific inputs. The same workflow can run many times with different parameters, and each run is tracked independently.
 
 ### Artifact
 
-Every screenshot, HTML snapshot, downloaded file, or extracted CSV is an `Artifact`. Artifacts are stored in S3, Azure Blob, or the local filesystem depending on your `SKYVERN_STORAGE_TYPE` setting, and their URIs are persisted in the `artifacts` table.
+Every screenshot, HTML snapshot, downloaded file, or extracted CSV is an `Artifact`. Artifacts are stored in S3, Azure Blob, or the local filesystem depending on your `SKYVERN_STORAGE_TYPE` setting, with their URIs persisted in the `artifacts` table.
 
 ---
 
 ## LLM routing
 
-Skyvern uses **LiteLLM** as a unified interface to every LLM provider. The `LLMConfigRegistry` maps named keys (like `OPENAI_GPT4O`, `ANTHROPIC_CLAUDE3.5_SONNET`) to provider-specific configurations. The primary model is set via the `LLM_KEY` environment variable.
+Skyvern uses **LiteLLM** as a unified interface to every LLM provider. The `LLMConfigRegistry` maps named keys (like `OPENAI_GPT4O`, `ANTHROPIC_CLAUDE3.5_SONNET`) to provider-specific configurations. The active model is chosen via the `LLM_KEY` environment variable.
 
-The `ForgeApp` actually holds multiple LLM handlers - a primary one for general reasoning, and specialized handlers for specific tasks like element selection (`SELECT_AGENT_LLM_KEY`) and data extraction (`EXTRACTION_LLM_KEY`). Each can point to a different model, letting you balance cost and capability per task type.
+`ForgeApp` holds multiple specialized LLM handlers beyond the primary one. For example, `SELECT_AGENT_LLM_KEY` controls which model handles element selection, and `EXTRACTION_LLM_KEY` controls data extraction. Each can point to a different model, letting you balance cost and capability per task type.
 
 ---
 
 ## Storage backends
 
-Artifacts (screenshots, files, etc.) can be stored in three places:
+Artifacts can be stored in three places:
 
-- **Local filesystem** (`SKYVERN_STORAGE_TYPE=local`) - default for development
-- **AWS S3** (`SKYVERN_STORAGE_TYPE=s3cloud`) - recommended for production
-- **Azure Blob Storage** (`SKYVERN_STORAGE_TYPE=azureblob`) - for Azure deployments
+- **Local filesystem** (`SKYVERN_STORAGE_TYPE=local`) — default for development
+- **AWS S3** (`SKYVERN_STORAGE_TYPE=s3cloud`) — recommended for production
+- **Azure Blob Storage** (`SKYVERN_STORAGE_TYPE=azureblob`) — for Azure deployments
 
-The storage backend is abstracted behind a `BaseStorage` protocol, so switching is a configuration change, not a code change.
+The storage backend is abstracted behind a `BaseStorage` interface, so switching is a configuration change with no code changes.
 
 ---
 
 ## Multi-tenancy
 
-Every database record carries an `organization_id`. The API layer extracts the org context from the API key on each request and scopes all database queries to that org. This means a single Skyvern instance can serve multiple isolated tenants without any data leaking between them.
+Every database record carries an `organization_id`. The API layer extracts org context from the API key on each request and scopes all database queries to that org. A single Skyvern instance can serve multiple isolated tenants without any data leaking between them.
 
 ---
 
@@ -199,7 +197,7 @@ Traditional automation relies on XPath or CSS selectors, which break whenever a 
 
 **Why steps instead of a single LLM call?**
 
-Complex tasks require many actions. Breaking them into steps lets the agent observe the result of each action before deciding what to do next. It also makes debugging tractable - you can look at step 4's screenshot and see exactly what the agent saw when it made a wrong decision.
+Complex tasks require many actions. Breaking them into steps lets the agent observe the result of each action before deciding what to do next. It also makes debugging tractable — you can look at step 4's screenshot and see exactly what the agent saw when it made a wrong decision.
 
 **Why PostgreSQL instead of an in-memory store?**
 
