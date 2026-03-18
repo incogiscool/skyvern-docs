@@ -7,8 +7,8 @@
 | # | Path | Type | Description | Outcome |
 |---|------|------|-------------|---------|
 | 1 | getting-started | Guide | Installation (pip, Docker, source), quickstart (running first task), environment setup (LLM provider config, database) | Install and run first task in 10 minutes |
-| 2 | architecture | Explanation | System overview and components, task execution flow (agent → LLM → browser → database), workflow engine and block types, database schema | Understand component interactions and task flow |
-| 3 | api-reference | Reference | Complete REST API endpoints (tasks, workflows, browser sessions, credentials), request/response schemas with examples, status codes and error handling, WebSocket streaming API | Construct valid API requests and understand all endpoints |
+| 2 | architecture | Explanation | System overview and components, task execution flow (agent → LLM → browser → database), workflow engine and block types, database schema | Understand how Skyvern's components interact and how tasks flow through the system |
+| 3 | api-reference | Reference | Complete REST API endpoints (tasks, workflows, browser sessions, credentials), request/response schemas with examples, status codes and error handling, WebSocket streaming API | Construct valid API requests and understand all available endpoints and their parameters |
 | 4 | sdk-guide | Guide | Python SDK (Skyvern class, SkyvernBrowser, SkyvernBrowserPage), decorators and workflow DSL (@workflow, @action, @cached, @login), script service functions, TypeScript SDK basics |
 | 5 | workflows | Guide | Workflow definition format, block types (ActionBlock, ValidationBlock, LoopBlock, etc.), parameters and variable passing, conditional logic and loops |
 | 6 | browser-automation | Guide | Using AI-powered locators, screenshot analysis and vision capabilities, browser session management, handling dynamic content and loading states |
