@@ -20,6 +20,15 @@
 | 12 | cli-reference | Reference | Command reference (run-task, run-workflow, setup, etc.), options and flags, configuration files |
 | 13 | examples | Reference | Common workflows (form filling, data scraping, login), complex scenarios (multi-page workflows, error handling), code snippets for different use cases |
 
+
+## Page Outcomes
+
+**Page 1 (getting-started)**: Reader will be able to install and run their first Skyvern task in 10 minutes.
+
+**Page 2 (architecture)**: Reader will understand how Skyvern's components interact and how tasks flow through the system.
+
+**Page 3 (api-reference)**: Reader will be able to construct valid API requests and understand all available endpoints and their parameters.
+
 ## Notes
 
 - **Guides** (8 total): Practical, task-oriented documentation for users learning features
