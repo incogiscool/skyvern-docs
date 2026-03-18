@@ -3,5 +3,40 @@
   "projectName": "test",
   "repoOwner": "incogiscool",
   "repoName": "skyvern-docs",
-  "createdAt": "2026-03-18T21:10:07.799Z"
+  "currentStep": 0,
+  "status": "active",
+  "createdAt": "2026-03-18T21:10:08.873Z",
+  "updatedAt": "2026-03-18T21:15:33.908Z",
+  "steps": {
+    "1": {
+      "status": "idle",
+      "report": {
+        "blocking": [
+          {
+            "id": "page-missing-outcome-1",
+            "description": "Page 1 in proposal is missing its one-sentence outcome statement"
+          },
+          {
+            "id": "page-missing-outcome-2",
+            "description": "Page 2 in proposal is missing its one-sentence outcome statement"
+          },
+          {
+            "id": "page-missing-outcome-3",
+            "description": "Page 3 in proposal is missing its one-sentence outcome statement"
+          }
+        ],
+        "judgments": [
+          {
+            "id": "many-open-questions",
+            "description": "open-questions.md has 38 unresolved items (more than 5)"
+          },
+          {
+            "id": "thin-section-overview",
+            "description": "context-index.md section \"overview\" appears thin (fewer than 5 lines)"
+          }
+        ],
+        "approved": 27
+      }
+    }
+  }
 }
