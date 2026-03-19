@@ -4,7 +4,7 @@ Skyvern automates browsers using a Vision LLM loop rather than pre-written selec
 
 ## Why Vision LLM instead of selectors
 
-Traditional browser automation works by locating DOM elements with XPath or CSS selectors (`#submit-button`, `.checkout-form input[type="text"]`). This is fast and reliable — until the website changes. A single redesign can silently break dozens of automations, and sites that render content dynamically or behind anti-bot measures are nearly impossible to scrape reliably this way.
+Traditional browser automation works by locating DOM elements with XPath or CSS selectors (`#submit-button`, `.checkout-form input[type="text"]`). This is fast and reliable - until the website changes. A single redesign can silently break dozens of automations, and sites that render content dynamically or behind anti-bot measures are nearly impossible to scrape reliably this way.
 
 Skyvern's approach is different: instead of teaching the system where to click, you describe *what you want done*. At each step, Skyvern takes a screenshot of the current browser state and asks a Vision LLM to decide what action to take next. The LLM reads the screenshot visually, the same way a human would, and returns an action. Playwright then executes that action, another screenshot is taken, and the loop continues.
 
@@ -29,7 +29,7 @@ Here is the core loop for a single task:
          ↓
 7. Step result and screenshot saved as artifacts
          ↓
-8. Loop back to step 3 — until COMPLETE or TERMINATE is returned
+8. Loop back to step 3 - until COMPLETE or TERMINATE is returned
 ```
 
 When the LLM determines the goal has been achieved, it returns a `complete` action, which ends the loop. If the task is impossible (wrong URL, insufficient permissions, etc.), it returns `terminate` instead. Each iteration is a **Step**, and steps are saved to the database so you can inspect every decision the agent made.
@@ -47,22 +47,22 @@ FastAPI Application  (skyvern/forge/api_app.py)
   └─ legacy routers for backward compatibility
             ↓
 Routes Layer  (skyvern/forge/sdk/routes/)
-  ├─ agent_protocol.py  — tasks, workflows, runs
-  ├─ scripts.py         — script CRUD and execution
-  ├─ credentials.py     — secrets management
-  ├─ browser_sessions.py — browser lifecycle
-  └─ streaming/          — WebSocket and SSE handlers
+  ├─ agent_protocol.py  - tasks, workflows, runs
+  ├─ scripts.py         - script CRUD and execution
+  ├─ credentials.py     - secrets management
+  ├─ browser_sessions.py - browser lifecycle
+  └─ streaming/          - WebSocket and SSE handlers
             ↓
 Services Layer  (skyvern/services/)
-  ├─ task_v2_service.py  — task orchestration
-  ├─ script_service.py   — script generation and execution
-  └─ workflow_service.py — workflow execution
+  ├─ task_v2_service.py  - task orchestration
+  ├─ script_service.py   - script generation and execution
+  └─ workflow_service.py - workflow execution
             ↓
 Core Layer  (skyvern/webeye/, skyvern/forge/agent.py)
-  ├─ BrowserManager   — Playwright browser lifecycle
-  ├─ Agent            — LLM agent loop (execute_step)
-  ├─ Action handlers  — translates LLM output to Playwright calls
-  └─ LLM APIs         — multi-provider via LiteLLM
+  ├─ BrowserManager   - Playwright browser lifecycle
+  ├─ Agent            - LLM agent loop (execute_step)
+  ├─ Action handlers  - translates LLM output to Playwright calls
+  └─ LLM APIs         - multi-provider via LiteLLM
             ↓
 Data Layer  (SQLAlchemy + PostgreSQL, S3 / Azure Blob)
 ```
@@ -93,7 +93,7 @@ By default, each task gets a fresh browser context that is destroyed when the ta
 
 ### Credentials
 
-Credentials (passwords, TOTP secrets, credit card details) are stored encrypted in the database. They can also sync from external vaults (Bitwarden, 1Password, Azure Key Vault). Credentials are never returned in API responses — only non-sensitive metadata like the username and last-four digits.
+Credentials (passwords, TOTP secrets, credit card details) are stored encrypted in the database. They can also sync from external vaults (Bitwarden, 1Password, Azure Key Vault). Credentials are never returned in API responses - only non-sensitive metadata like the username and last-four digits.
 
 ### Artifacts
 
@@ -101,7 +101,7 @@ Every screenshot, LLM response, page recording, and extracted data file is store
 
 ## LLM providers
 
-Skyvern uses [LiteLLM](https://github.com/BerriAI/litellm) as a unified interface over multiple LLM providers. The active provider is set with `LLM_KEY` in your `.env` file. Supported providers include OpenAI, Anthropic, Google Gemini, Azure OpenAI, Amazon Bedrock, Ollama, and several others. Vision support (required for screenshot analysis) depends on the model — `LLM_CONFIG_SUPPORT_VISION` must be `true`.
+Skyvern uses [LiteLLM](https://github.com/BerriAI/litellm) as a unified interface over multiple LLM providers. The active provider is set with `LLM_KEY` in your `.env` file. Supported providers include OpenAI, Anthropic, Google Gemini, Azure OpenAI, Amazon Bedrock, Ollama, and several others. Vision support (required for screenshot analysis) depends on the model - `LLM_CONFIG_SUPPORT_VISION` must be `true`.
 
 ## Multi-tenancy
 
@@ -109,7 +109,7 @@ Every resource (task, workflow, credential, artifact) belongs to an **Organizati
 
 ## Common misconceptions
 
-**"Skyvern takes a screenshot once and figures everything out."** No — it takes a screenshot at every step. The LLM only sees the current state of the page, not past states (though the action history is included in the prompt).
+**"Skyvern takes a screenshot once and figures everything out."** No - it takes a screenshot at every step. The LLM only sees the current state of the page, not past states (though the action history is included in the prompt).
 
 **"Skyvern replaces Playwright."** Skyvern sits on top of Playwright, using it to execute actions. You can still use plain Playwright selectors in scripts if you know the site won't change.
 

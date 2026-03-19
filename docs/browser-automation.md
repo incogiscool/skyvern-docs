@@ -4,7 +4,7 @@ Skyvern's browser layer sits between the LLM agent and the web. This page explai
 
 ## How the browser works
 
-Skyvern uses [Playwright](https://playwright.dev/) as its browser automation library, running Chromium in headful mode by default. Every task or workflow gets a browser context — an isolated environment with its own cookies, local storage, and network state, similar to an incognito window.
+Skyvern uses [Playwright](https://playwright.dev/) as its browser automation library, running Chromium in headful mode by default. Every task or workflow gets a browser context - an isolated environment with its own cookies, local storage, and network state, similar to an incognito window.
 
 When a task starts, Skyvern:
 1. Creates a new Playwright browser context (or reuses an existing persistent session)
@@ -20,9 +20,9 @@ Anti-bot detection is countered by running Chrome with `--disable-blink-features
 
 The `BROWSER_TYPE` config setting controls which browser mode is used:
 
-**`chromium-headful`** (default) — A local Chrome/Chromium instance managed by Playwright. The browser opens on screen (or in a virtual display in Docker). This is the standard mode for most deployments.
+**`chromium-headful`** (default) - A local Chrome/Chromium instance managed by Playwright. The browser opens on screen (or in a virtual display in Docker). This is the standard mode for most deployments.
 
-**`cdp-connect`** — Connect to an existing Chrome instance via the Chrome DevTools Protocol. Useful if you want Skyvern to control a browser that's already running with your personal profile, extensions, and saved logins.
+**`cdp-connect`** - Connect to an existing Chrome instance via the Chrome DevTools Protocol. Useful if you want Skyvern to control a browser that's already running with your personal profile, extensions, and saved logins.
 
 To use CDP mode, start Chrome with remote debugging enabled:
 ```bash
@@ -94,7 +94,7 @@ This starts Chrome and creates an ngrok tunnel. The command prints a URL like `h
 }
 ```
 
-Always protect tunneled browsers with an API key (`skyvern browser serve --tunnel --api-key YOUR_KEY`) — without it, anyone with the URL can control your browser.
+Always protect tunneled browsers with an API key (`skyvern browser serve --tunnel --api-key YOUR_KEY`) - without it, anyone with the URL can control your browser.
 
 ## Proxy and geolocation
 
@@ -109,11 +109,11 @@ Pass `proxy_location` in any task or workflow run request. The accepted values a
 ```
 
 Common values:
-- `RESIDENTIAL` — US residential IP (default)
-- `US-CA`, `US-NY`, `US-TX`, `US-FL`, `US-WA` — specific US states
-- `RESIDENTIAL_GB`, `RESIDENTIAL_DE`, `RESIDENTIAL_FR`, `RESIDENTIAL_ES` — European countries
-- `RESIDENTIAL_JP`, `RESIDENTIAL_IN`, `RESIDENTIAL_AU`, `RESIDENTIAL_BR` — Asia-Pacific / Americas
-- `NONE` — no proxy
+- `RESIDENTIAL` - US residential IP (default)
+- `US-CA`, `US-NY`, `US-TX`, `US-FL`, `US-WA` - specific US states
+- `RESIDENTIAL_GB`, `RESIDENTIAL_DE`, `RESIDENTIAL_FR`, `RESIDENTIAL_ES` - European countries
+- `RESIDENTIAL_JP`, `RESIDENTIAL_IN`, `RESIDENTIAL_AU`, `RESIDENTIAL_BR` - Asia-Pacific / Americas
+- `NONE` - no proxy
 
 When a proxy location is set, the browser's timezone is automatically configured to match the region. For example, `US-CA` sets the timezone to `America/Los_Angeles`.
 
@@ -132,9 +132,9 @@ For city or state-level targeting, use a `GeoTarget` object instead of a string:
 ```
 
 Supported fields:
-- `country` — ISO 3166-1 alpha-2 code (required). Must be in the [supported list](https://www.skyvern.com/docs): US, GB, DE, FR, JP, AU, BR, CA, and others.
-- `subdivision` — ISO 3166-2 code without country prefix (e.g., `CA` for California, `ENG` for England).
-- `city` — City name in English from GeoNames.
+- `country` - ISO 3166-1 alpha-2 code (required). Must be in the [supported list](https://www.skyvern.com/docs): US, GB, DE, FR, JP, AU, BR, CA, and others.
+- `subdivision` - ISO 3166-2 code without country prefix (e.g., `CA` for California, `ENG` for England).
+- `city` - City name in English from GeoNames.
 
 ### Enabling proxies in self-hosted deployments
 

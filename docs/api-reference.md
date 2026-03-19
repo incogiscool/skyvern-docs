@@ -1,6 +1,6 @@
 # API Reference
 
-All Skyvern API endpoints are served under `/api/v1`. Authentication is required for every endpoint — pass your API key in the `x-api-key` header.
+All Skyvern API endpoints are served under `/api/v1`. Authentication is required for every endpoint - pass your API key in the `x-api-key` header.
 
 ```
 x-api-key: YOUR_API_KEY
@@ -77,7 +77,7 @@ POST /api/v1/run/tasks
 GET /runs/{run_id}
 ```
 
-Returns the current status and output of any run — task or workflow. The `run_id` starts with `tsk_` for tasks and `wr_` for workflow runs.
+Returns the current status and output of any run - task or workflow. The `run_id` starts with `tsk_` for tasks and `wr_` for workflow runs.
 
 **Path parameters:**
 
@@ -129,7 +129,7 @@ Cancels an in-progress task or workflow run. Returns `204 No Content` on success
 GET /runs/{run_id}/artifacts
 ```
 
-Returns all artifacts produced during the run — screenshots, recordings, LLM responses, HAR files, etc.
+Returns all artifacts produced during the run - screenshots, recordings, LLM responses, HAR files, etc.
 
 **Query parameters:**
 
@@ -147,7 +147,7 @@ Returns all artifacts produced during the run — screenshots, recordings, LLM r
 GET /runs/{run_id}/timeline
 ```
 
-Returns a structured timeline of events for a workflow run or task_v2 run — useful for debugging what happened at each stage.
+Returns a structured timeline of events for a workflow run or task_v2 run - useful for debugging what happened at each stage.
 
 ---
 
@@ -169,7 +169,7 @@ Resends the webhook notification for a completed run. Useful if your webhook end
 POST /workflows
 ```
 
-Creates a new workflow from a YAML or JSON definition. The workflow is not executed — use `POST /run/workflows` to run it.
+Creates a new workflow from a YAML or JSON definition. The workflow is not executed - use `POST /run/workflows` to run it.
 
 **Request body:**
 
@@ -275,7 +275,7 @@ POST /api/v1/run/workflows
 
 ## Credentials
 
-Credentials store secrets (passwords, credit cards, API keys) encrypted in the database. Raw secrets are never returned by the API — only non-sensitive metadata.
+Credentials store secrets (passwords, credit cards, API keys) encrypted in the database. Raw secrets are never returned by the API - only non-sensitive metadata.
 
 ### Create a credential
 
@@ -428,7 +428,7 @@ All errors return a JSON body with a `detail` field:
 
 | Status | Meaning |
 |---|---|
-| `400` | Bad request — invalid parameters |
+| `400` | Bad request - invalid parameters |
 | `401` | Missing or invalid API key |
 | `404` | Resource not found |
 | `422` | Validation error (invalid schema, YAML parse failure) |

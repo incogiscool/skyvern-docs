@@ -1,6 +1,6 @@
 # Workflows
 
-A workflow is a sequence of blocks that Skyvern executes in order. Each block does one thing — navigate a website, extract data, make an HTTP request, run a loop — and passes its output to the next block. When you need to automate a multi-step process that's too complex for a single task (like logging in, navigating to a report, downloading a file, and emailing it), workflows are the right tool.
+A workflow is a sequence of blocks that Skyvern executes in order. Each block does one thing - navigate a website, extract data, make an HTTP request, run a loop - and passes its output to the next block. When you need to automate a multi-step process that's too complex for a single task (like logging in, navigating to a report, downloading a file, and emailing it), workflows are the right tool.
 
 This page explains how to structure workflows, what block types are available, how to pass data between blocks, and how to deploy and run them.
 
@@ -28,7 +28,7 @@ Every block needs a unique `label`. Labels must be valid Python identifiers (let
 
 Parameters are the workflow's inputs. You define them at the top, and blocks reference them with Jinja2 templates: `{{ my_param }}`.
 
-There are several parameter types. The most common is `workflow` — a plain value passed in when you run the workflow:
+There are several parameter types. The most common is `workflow` - a plain value passed in when you run the workflow:
 
 ```yaml
 parameters:
@@ -95,7 +95,7 @@ blocks:
 
 Jinja2 templating is available in any string field of any block. The workflow engine evaluates templates at runtime, so `{{ fetch_items_output }}` becomes the actual data extracted by the first block before the second block runs.
 
-By default, the template engine is in `lax` mode — undefined variables resolve to empty strings rather than throwing an error. If you need strict validation, set `WORKFLOW_TEMPLATING_STRICTNESS=strict` in your environment.
+By default, the template engine is in `lax` mode - undefined variables resolve to empty strings rather than throwing an error. If you need strict validation, set `WORKFLOW_TEMPLATING_STRICTNESS=strict` in your environment.
 
 ## Block types
 
@@ -114,13 +114,13 @@ Navigates a website and optionally extracts data. This is the core block for any
 ```
 
 Key fields:
-- `url` — the starting URL (can be a template)
-- `navigation_goal` — what to do on the page
-- `data_extraction_goal` — what to extract (optional)
-- `data_schema` — JSON Schema for the extracted data
-- `parameter_keys` — which parameters to make available to the agent
-- `complete_criterion` — custom completion condition
-- `terminate_criterion` — when to stop with failure
+- `url` - the starting URL (can be a template)
+- `navigation_goal` - what to do on the page
+- `data_extraction_goal` - what to extract (optional)
+- `data_schema` - JSON Schema for the extracted data
+- `parameter_keys` - which parameters to make available to the agent
+- `complete_criterion` - custom completion condition
+- `terminate_criterion` - when to stop with failure
 
 ### for_loop
 
@@ -279,7 +279,7 @@ Triggers another workflow and optionally waits for it to complete. Useful for co
 
 ## The finally block
 
-The `finally_block_label` at the workflow level specifies a block that always runs when the workflow ends — whether it succeeded, failed, or was canceled. Use it for cleanup, notifications, or logging.
+The `finally_block_label` at the workflow level specifies a block that always runs when the workflow ends - whether it succeeded, failed, or was canceled. Use it for cleanup, notifications, or logging.
 
 ```yaml
 workflow_definition:

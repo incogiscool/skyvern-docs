@@ -1,6 +1,6 @@
 # Getting Started
 
-By the end of this guide, you'll have Skyvern running locally and will have executed your first browser automation task — either through the web UI or the Python SDK.
+By the end of this guide, you'll have Skyvern running locally and will have executed your first browser automation task - either through the web UI or the Python SDK.
 
 ## Prerequisites
 
@@ -48,13 +48,13 @@ cd skyvern
 pip install skyvern && skyvern quickstart
 ```
 
-When prompted, choose "Docker Compose." This starts PostgreSQL, the Skyvern backend on port 8000, and the UI on port 8080 — all containerized.
+When prompted, choose "Docker Compose." This starts PostgreSQL, the Skyvern backend on port 8000, and the UI on port 8080 - all containerized.
 
 **4. Open the UI:** Navigate to `http://localhost:8080`.
 
 ## Your first task via the UI
 
-Once Skyvern is running, open `http://localhost:8080`. You'll see the task runner interface. Paste a goal into the prompt field — something like:
+Once Skyvern is running, open `http://localhost:8080`. You'll see the task runner interface. Paste a goal into the prompt field - something like:
 
 ```
 Navigate to https://news.ycombinator.com and return the titles of the top 3 posts.
@@ -128,11 +128,11 @@ If you don't want to manage local infrastructure, [Skyvern Cloud](https://app.sk
 skyvern = Skyvern(api_key="your-cloud-api-key")
 ```
 
-Everything else — task creation, result retrieval, workflows — works the same way.
+Everything else - task creation, result retrieval, workflows - works the same way.
 
 ## Next steps
 
-- **Architecture** — learn how the Vision LLM loop works under the hood
-- **Workflows** — chain multiple tasks together with conditional logic
-- **Python SDK** — full reference for the `Skyvern` client
-- **Credentials & Auth** — store passwords and API keys for use in automation tasks
+- **Architecture** - learn how the Vision LLM loop works under the hood
+- **Workflows** - chain multiple tasks together with conditional logic
+- **Python SDK** - full reference for the `Skyvern` client
+- **Credentials & Auth** - store passwords and API keys for use in automation tasks

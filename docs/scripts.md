@@ -1,6 +1,6 @@
 # Scripts
 
-Scripts are Python files that run inside Skyvern's execution environment. They give you direct control over browser automation using a `SkyvernPage` object — a Playwright `Page` with AI-powered methods added on top. Use scripts when you want code-level control over the automation rather than natural language prompts, when you have performance requirements, or when you're building something too complex for a single workflow block.
+Scripts are Python files that run inside Skyvern's execution environment. They give you direct control over browser automation using a `SkyvernPage` object - a Playwright `Page` with AI-powered methods added on top. Use scripts when you want code-level control over the automation rather than natural language prompts, when you have performance requirements, or when you're building something too complex for a single workflow block.
 
 ## How scripts differ from workflows
 
@@ -14,14 +14,14 @@ A key advantage of scripts is caching. When Skyvern generates a script from a wo
 
 Scripts receive a `SkyvernPage` object that extends Playwright's `Page` class. You have access to all standard Playwright methods plus these AI-powered additions:
 
-**`page.act(prompt)`** — Perform an action using natural language. The agent takes a screenshot and executes whatever the prompt describes.
+**`page.act(prompt)`** - Perform an action using natural language. The agent takes a screenshot and executes whatever the prompt describes.
 
 ```python
 await page.act("Click the Submit button")
 await page.act("Fill in the email field with the user's address")
 ```
 
-**`page.extract(prompt, schema=None)`** — Extract structured data from the current page.
+**`page.extract(prompt, schema=None)`** - Extract structured data from the current page.
 
 ```python
 result = await page.extract("Get the product name and price")
@@ -42,7 +42,7 @@ result = await page.extract(
 )
 ```
 
-**`page.validate(prompt)`** — Check page state and return a boolean.
+**`page.validate(prompt)`** - Check page state and return a boolean.
 
 ```python
 is_logged_in = await page.validate("Check if the user is logged in")
@@ -50,7 +50,7 @@ if not is_logged_in:
     raise Exception("Login failed")
 ```
 
-**`page.prompt(prompt, schema=None)`** — Send an arbitrary prompt to the LLM and return its response.
+**`page.prompt(prompt, schema=None)`** - Send an arbitrary prompt to the LLM and return its response.
 
 In addition to these AI methods, all standard Playwright methods work normally:
 
@@ -114,7 +114,7 @@ Available action functions: `run_task`, `action`, `login`, `extract`, `download`
 
 ## The @cached decorator
 
-When Skyvern generates a script from a workflow, each block is wrapped with `@cached`. A cached function holds the exact browser interactions recorded during a previous successful run. When the script runs again, Skyvern replays those interactions instead of calling the LLM — skipping the screenshot/LLM/action loop entirely.
+When Skyvern generates a script from a workflow, each block is wrapped with `@cached`. A cached function holds the exact browser interactions recorded during a previous successful run. When the script runs again, Skyvern replays those interactions instead of calling the LLM - skipping the screenshot/LLM/action loop entirely.
 
 ```python
 import skyvern

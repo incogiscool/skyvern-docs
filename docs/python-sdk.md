@@ -191,9 +191,9 @@ task = await page.agent.run_task("Complete the checkout form and submit")
 
 `page.agent` gives you higher-level workflow commands that operate in the context of the current browser session:
 
-**`page.agent.run_task(prompt, ...)`** — Run an AI task on the current page. The agent sees the same browser state as the page.
+**`page.agent.run_task(prompt, ...)`** - Run an AI task on the current page. The agent sees the same browser state as the page.
 
-**`page.agent.login(credential_type, ...)`** — Log in using stored credentials. Supports Skyvern credentials, Bitwarden, 1Password, and Azure Vault:
+**`page.agent.login(credential_type, ...)`** - Log in using stored credentials. Supports Skyvern credentials, Bitwarden, 1Password, and Azure Vault:
 
 ```python
 from skyvern.schemas.run_blocks import CredentialType
@@ -219,9 +219,9 @@ await page.agent.login(
 )
 ```
 
-**`page.agent.run_workflow(workflow_id, parameters={})`** — Run a saved workflow in the current browser context.
+**`page.agent.run_workflow(workflow_id, parameters={})`** - Run a saved workflow in the current browser context.
 
-**`page.agent.download_files(prompt)`** — Navigate and download files.
+**`page.agent.download_files(prompt)`** - Navigate and download files.
 
 ### Managing a session
 
@@ -313,7 +313,7 @@ asyncio.run(main())
 
 The Python SDK wraps the HTTP API but adds:
 - Browser lifecycle management (`launch_local_browser`, `launch_cloud_browser`)
-- A `SkyvernPage` object with `act()`, `extract()`, `validate()` — no API calls needed for these
+- A `SkyvernPage` object with `act()`, `extract()`, `validate()` - no API calls needed for these
 - `wait_for_completion=True` for blocking until task/workflow finishes
 - Automatic session handling when using `page.agent`
 

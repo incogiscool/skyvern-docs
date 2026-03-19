@@ -6,9 +6,9 @@ This page covers how to run Skyvern in three environments: local development, Do
 
 All deployments share these dependencies:
 
-- PostgreSQL 14+ — the primary database
-- Python 3.11 or 3.12 — the backend runtime
-- Chromium/Chrome — the browser (installed by the Docker images, or via `playwright install`)
+- PostgreSQL 14+ - the primary database
+- Python 3.11 or 3.12 - the backend runtime
+- Chromium/Chrome - the browser (installed by the Docker images, or via `playwright install`)
 - An LLM API key (OpenAI, Anthropic, Gemini, etc.)
 
 Redis is listed in `docker-compose.yml` but is optional for basic operation. It's used for rate limiting and caching.
@@ -29,7 +29,7 @@ The wizard asks for your LLM provider and API key, writes a `.env` file, runs da
 To run components separately:
 
 ```bash
-# 1. Start PostgreSQL (however you prefer — Docker, Homebrew, native)
+# 1. Start PostgreSQL (however you prefer - Docker, Homebrew, native)
 #    Database URL: postgresql://skyvern@localhost/skyvern
 
 # 2. Run database migrations
@@ -157,7 +157,7 @@ kubectl apply -f frontend/
 kubectl delete pod -n skyvern -l app=skyvern-frontend
 ```
 
-**Architecture:** The Kubernetes deployment uses a single backend replica and a single frontend replica. The backend connects to PostgreSQL via the internal service DNS. Artifacts are stored on `hostPath` volumes (`/data/artifacts`, `/data/videos`, etc.) — for production, replace these with persistent volumes or S3.
+**Architecture:** The Kubernetes deployment uses a single backend replica and a single frontend replica. The backend connects to PostgreSQL via the internal service DNS. Artifacts are stored on `hostPath` volumes (`/data/artifacts`, `/data/videos`, etc.) - for production, replace these with persistent volumes or S3.
 
 **Ingress:** The included `ingress.yaml` uses Traefik. For other ingress controllers, update the annotations. The default routing:
 - `/api/` → backend port 8000
@@ -198,7 +198,7 @@ These are the most important settings. All are read from `.env` or the process e
 | `DATABASE_STRING` | PostgreSQL connection URL (async driver) |
 | `LLM_KEY` | Active LLM model key (e.g., `OPENAI_GPT4O`, `ANTHROPIC_CLAUDE3.5_SONNET`) |
 | `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` / etc. | API key for your LLM provider |
-| `SECRET_KEY` | JWT signing secret — generate a strong random value for production |
+| `SECRET_KEY` | JWT signing secret - generate a strong random value for production |
 
 **LLM provider toggles** (set the one you're using to `true`):
 
@@ -228,7 +228,7 @@ ENABLE_OPENROUTER=true
 | Variable | Default | Description |
 |---|---|---|
 | `PORT` | `8000` | Backend port |
-| `ALLOWED_ORIGINS` | `["*"]` | CORS allowed origins — restrict this in production |
+| `ALLOWED_ORIGINS` | `["*"]` | CORS allowed origins - restrict this in production |
 | `LOG_LEVEL` | `INFO` | Log verbosity: `DEBUG`, `INFO`, `WARNING`, `ERROR` |
 | `JSON_LOGGING` | `false` | Emit structured JSON logs |
 | `REDIS_URL` | `redis://localhost:6379/0` | Redis URL |
@@ -244,7 +244,7 @@ ENABLE_OPENROUTER=true
 
 ## Scaling considerations
 
-Skyvern is stateless at the API layer — the database holds all state. To scale horizontally, run multiple backend instances behind a load balancer. Each instance manages its own browser processes, so browser state is node-local.
+Skyvern is stateless at the API layer - the database holds all state. To scale horizontally, run multiple backend instances behind a load balancer. Each instance manages its own browser processes, so browser state is node-local.
 
 Session recordings and artifacts are stored in S3 or Azure Blob (set `SKYVERN_STORAGE_TYPE` accordingly) so all instances can access them.
 

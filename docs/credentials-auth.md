@@ -6,11 +6,11 @@ This page explains the credential types, how to create and manage them, how to u
 
 ## Credential types
 
-**Password** — A username and password pair. Optionally includes a TOTP secret for 2FA via authenticator app, or a TOTP identifier for email/SMS-based codes.
+**Password** - A username and password pair. Optionally includes a TOTP secret for 2FA via authenticator app, or a TOTP identifier for email/SMS-based codes.
 
-**Credit card** — Full card details (number, CVV, expiration, brand, holder name). Skyvern stores all fields but only returns the last four digits and brand in API responses.
+**Credit card** - Full card details (number, CVV, expiration, brand, holder name). Skyvern stores all fields but only returns the last four digits and brand in API responses.
 
-**Secret** — A generic key-value secret (API tokens, connection strings, etc.) with an optional label.
+**Secret** - A generic key-value secret (API tokens, connection strings, etc.) with an optional label.
 
 ## Creating a credential
 
@@ -32,7 +32,7 @@ curl -X POST https://api.skyvern.com/api/v1/credentials \
   }'
 ```
 
-The response includes a `credential_id` (e.g., `cred_abc123`). Save this — you'll reference it when using the credential in workflows.
+The response includes a `credential_id` (e.g., `cred_abc123`). Save this - you'll reference it when using the credential in workflows.
 
 For a credit card:
 
@@ -80,7 +80,7 @@ Raw secrets are **never** returned by any Skyvern API endpoint. When you create 
 - Credit card credentials: `last_four`, `brand`
 - Secret credentials: `secret_label`
 
-This is enforced at the model level — the `PasswordCredentialResponse`, `CreditCardCredentialResponse`, and `SecretCredentialResponse` Pydantic models do not have fields for the raw secret values. Any caller with a valid API key can list credentials and see metadata, but cannot extract the actual passwords or card numbers.
+This is enforced at the model level - the `PasswordCredentialResponse`, `CreditCardCredentialResponse`, and `SecretCredentialResponse` Pydantic models do not have fields for the raw secret values. Any caller with a valid API key can list credentials and see metadata, but cannot extract the actual passwords or card numbers.
 
 ## Using credentials in workflows
 
@@ -130,9 +130,9 @@ For cases where you need to specify the credential explicitly, use the credentia
 
 Skyvern supports three types of two-factor authentication:
 
-**Authenticator app (`totp_type: authenticator`)** — You store the TOTP secret (the base32 string shown when setting up an authenticator app). Skyvern generates time-based codes automatically using that secret, without any human intervention.
+**Authenticator app (`totp_type: authenticator`)** - You store the TOTP secret (the base32 string shown when setting up an authenticator app). Skyvern generates time-based codes automatically using that secret, without any human intervention.
 
-**Email or SMS codes (`totp_type: email` or `totp_type: text`)** — The 2FA code is sent to an email or phone when you log in. Your application must forward the code to Skyvern's TOTP endpoint as soon as it arrives:
+**Email or SMS codes (`totp_type: email` or `totp_type: text`)** - The 2FA code is sent to an email or phone when you log in. Your application must forward the code to Skyvern's TOTP endpoint as soon as it arrives:
 
 ```bash
 curl -X POST https://api.skyvern.com/api/v1/credentials/totp \
