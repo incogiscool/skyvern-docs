@@ -3,5 +3,27 @@
   "projectName": "test",
   "repoOwner": "incogiscool",
   "repoName": "skyvern-docs",
-  "createdAt": "2026-03-19T01:31:42.937Z"
+  "currentStep": 0,
+  "status": "active",
+  "createdAt": "2026-03-19T01:31:44.057Z",
+  "updatedAt": "2026-03-19T01:39:15.598Z",
+  "steps": {
+    "1": {
+      "status": "idle",
+      "report": {
+        "blocking": [],
+        "judgments": [
+          {
+            "id": "many-open-questions",
+            "description": "open-questions.md has 144 unresolved items (more than 5)"
+          },
+          {
+            "id": "no-recent-changes",
+            "description": "No mention of recent commits or changes in context-index.md"
+          }
+        ],
+        "approved": 51
+      }
+    }
+  }
 }
