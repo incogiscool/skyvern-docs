@@ -3,13 +3,13 @@
   "projectName": "test",
   "repoOwner": "incogiscool",
   "repoName": "skyvern-docs",
-  "currentStep": 0,
+  "currentStep": 1,
   "status": "active",
   "createdAt": "2026-03-19T01:31:44.057Z",
-  "updatedAt": "2026-03-19T01:39:15.598Z",
+  "updatedAt": "2026-03-19T01:39:28.011Z",
   "steps": {
     "1": {
-      "status": "idle",
+      "status": "approved",
       "report": {
         "blocking": [],
         "judgments": [
