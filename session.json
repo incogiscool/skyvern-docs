@@ -6,7 +6,7 @@
   "currentStep": 1,
   "status": "active",
   "createdAt": "2026-03-19T01:31:44.057Z",
-  "updatedAt": "2026-03-19T01:39:28.011Z",
+  "updatedAt": "2026-03-19T02:03:03.120Z",
   "steps": {
     "1": {
       "status": "approved",
@@ -23,6 +23,135 @@
           }
         ],
         "approved": 51
+      }
+    },
+    "2": {
+      "status": "idle",
+      "report": {
+        "blocking": [],
+        "judgments": [
+          {
+            "id": "unintroduced-code-api-reference.md",
+            "description": "The 'Secret credential' example code block at the end of the page appears to be cut off and has no complete introduction or content - it starts with a label but the JSON body is incomplete/missing."
+          },
+          {
+            "id": "vestigial-section-api-reference.md",
+            "description": "The 'Cancel a run' section (### Cancel a run) contains only a single sentence of content ('Cancels an in-progress task or workflow run. Returns `204 No Content` on success.') with no request/response details, parameters, or example, making it a very thin section that adds minimal value."
+          },
+          {
+            "id": "vestigial-section-api-reference.md",
+            "description": "The 'Retry run webhook' section contains only a single sentence of content with no parameters, request body, response shape, or example code block."
+          },
+          {
+            "id": "vestigial-section-api-reference.md",
+            "description": "The 'Get run timeline' section contains only a single sentence of content with no parameters, response shape, or example, providing minimal useful information."
+          },
+          {
+            "id": "missing-params-api-reference.md",
+            "description": "The 'Get a run' endpoint's path parameter table is missing a 'Type' column, listing `run_id` without a type. Additionally, the 'Cancel a run', 'Get run timeline', and 'Retry run webhook' endpoints show no response shapes as code blocks."
+          },
+          {
+            "id": "vestigial-section-workflows.md",
+            "description": "The 'file_download' section under '### file_download' contains only a one-sentence description ('Navigates to a URL and downloads a file.') followed by a code block, with the code block itself being truncated/incomplete. The prose content is under 2 sentences and adds minimal value on its own."
+          },
+          {
+            "id": "unintroduced-code-browser-automation.md",
+            "description": "The code block under 'Creating a persistent session' showing the curl POST request is not preceded by any introductory prose sentence — the heading is followed directly by the code block with no leading sentence explaining what the user is about to do."
+          },
+          {
+            "id": "choppy-writing-browser-automation.md",
+            "description": "In the 'Recording and artifacts' section, the final sentence is cut off mid-word ('availa'), and the section contains very short, choppy sentences. Additionally, 'These are stored in S3 or Azure Blob Storage and accessible via signed URLs with 24-hour expiration.' is followed by an incomplete sentence fragment, indicating abrupt/disconnected writing at the end of the document."
+          },
+          {
+            "id": "vestigial-section-browser-automation.md",
+            "description": "The 'Real-time browser streaming' section contains only a brief intro sentence followed by two code blocks and a single closing sentence — fewer than 2 full sentences of explanatory prose — making it thin and of marginal standalone value as a section."
+          },
+          {
+            "id": "vestigial-section-credentials-auth.md",
+            "description": "The 'Managing credentials' section at the end of the page contains only bare HTTP method/endpoint lines with no prose explanation, no descriptions of parameters, and no example responses. It has fewer than 2 sentences of actual content and adds very little value as written. The PATCH entry is also incomplete (cut off mid-sentence with no closing code block or explanation)."
+          },
+          {
+            "id": "unintroduced-code-python-sdk.md",
+            "description": "The code block under 'Installation' (```bash pip install skyvern```) is not preceded by any introductory prose sentence — the section heading is immediately followed by the code block with no explanatory sentence before it."
+          },
+          {
+            "id": "vestigial-section-python-sdk.md",
+            "description": "The 'Canceling a run' section contains only a single line of code with no prose explanation, which is under 2 sentences of content and adds little value as a standalone section."
+          },
+          {
+            "id": "vestigial-section-typescript-sdk.md",
+            "description": "The '## Scripts' section contains only a single brief sentence of prose ('Scripts are accessed via the nested `scripts` resource:') plus a tiny code snippet showing one method call. This is minimal content that adds little value and could be integrated into another section or expanded."
+          },
+          {
+            "id": "vestigial-section-typescript-sdk.md",
+            "description": "The '## Per-request options' section at the end of the document contains only an incomplete sentence ('Every method accepts an optional `requestOptions` object for request-level override') with no code example, no further explanation, and no list of options. It is cut off and adds little to no value in its current state."
+          },
+          {
+            "id": "unintroduced-code-deployment.md",
+            "description": "The 'LLM provider toggles' section contains a code block listing environment variables with no preceding prose sentence introducing it - only a parenthetical label in the header row."
+          },
+          {
+            "id": "vestigial-section-Getting.md",
+            "description": "The '## Verifying everything works' section contains mostly bullet points with minimal prose, and the '## Using Skyvern Cloud instead' section is very brief. More critically, the '## Next steps' section contains only a list of links with no prose sentences at all, making it a vestigial section with under 2 sentences of content that adds little value beyond a bare link list."
+          },
+          {
+            "id": "unintroduced-code-API.md",
+            "description": "The 'Secret credential' example ends with an incomplete JSON block that has no content after 'credential:' — and more broadly, the final code block under 'Secret credential' is cut off with no prose introducing or completing it."
+          },
+          {
+            "id": "vestigial-section-API.md",
+            "description": "The 'Cancel a run' section (### Cancel a run) contains only a single sentence of content ('Cancels an in-progress task or workflow run. Returns 204 No Content on success.') with no parameters, request body, or response shape documented, making it a thin section that adds little value."
+          },
+          {
+            "id": "missing-params-API.md",
+            "description": "The 'Get run timeline' section lists no parameters, no response shape, and no description beyond a single sentence — the response shape is not shown as a code block. Similarly, 'Retry run webhook' and 'Update a workflow' and 'Delete a workflow' sections lack response shape code blocks. The page type is API Reference and these endpoints are missing response documentation."
+          },
+          {
+            "id": "unintroduced-code-Workflows.md",
+            "description": "The `file_download` block example at the end of the page appears without a preceding introductory sentence explaining what the code block demonstrates — the prose only says 'Navigates to a URL and downloads a file.' which is a single sentence, but the code block itself is truncated/incomplete, and more critically the navigation, extraction, login, action section's code block is preceded by minimal prose that doesn't fully introduce it. However, the clearest violation is the top-level workflow structure YAML block: it appears immediately after 'A workflow is a YAML document with three sections:' which is acceptable. Re-examining: the `wait` block example is preceded only by 'Pauses the workflow for a fixed number of seconds. Useful when waiting for an external process to complete.' — two sentences, so that's fine. The `file_download` section has prose before it. On closer inspection, the very first code block under 'Workflow structure' is introduced, all block type code blocks are introduced. No clear violation found on re-check."
+          },
+          {
+            "id": "vestigial-section-Workflows.md",
+            "description": "The 'wait' section contains only two very short sentences ('Pauses the workflow for a fixed number of seconds. Useful when waiting for an external process to complete.') plus a minimal code snippet, making it a thin section that adds little explanatory value beyond what the code itself shows. Similarly, the 'file_download' section is truncated and incomplete, containing a cut-off code block with no complete content, making it a vestigial section that adds little value and appears to be missing substantial content."
+          },
+          {
+            "id": "unintroduced-code-Browser.md",
+            "description": "The code block under 'Enabling proxies in self-hosted deployments' (the .env settings block starting with ENABLE_PROXY=true) is not preceded by an introductory sentence that explicitly introduces it as a code block. The preceding sentence ends with a colon but that alone is borderline; however, the bash code block at the very start of 'To use CDP mode, start Chrome with remote debugging enabled:' is fine. More clearly, the env variable block under the configuration table for self-hosted proxies lacks prose introducing it specifically."
+          },
+          {
+            "id": "vestigial-section-Browser.md",
+            "description": "The 'Recording and artifacts' section at the end of the page contains only a single incomplete sentence that cuts off mid-word ('are also availa'), making it well under 2 sentences of meaningful content and adding little value."
+          },
+          {
+            "id": "vestigial-section-Credentials.md",
+            "description": "The '## Managing credentials' section ends abruptly with only a PATCH endpoint line and no explanatory prose, containing well under 2 sentences of meaningful content and providing little standalone value."
+          },
+          {
+            "id": "unintroduced-code-Python.md",
+            "description": "The 'Full working example' section ends mid-code with 'awa' and the code block is truncated/incomplete, but more critically the code block under 'Point at a self-hosted instance by passing `base_url`:' is preceded only by a single sentence that is arguably introductory, however the main issue is the final code block in 'Full working example' is cut off abruptly with no closing ``` and incomplete content."
+          },
+          {
+            "id": "vestigial-section-Python.md",
+            "description": "The 'Canceling a run' section (## Canceling a run) contains only a single code block with no prose sentences, making it a near-empty section that adds little value and could be folded into another section."
+          },
+          {
+            "id": "unintroduced-code-TypeScript.md",
+            "description": "The 'Per-request options' section ends with an incomplete sentence ('Every method accepts an optional `requestOptions` object for request-level override') and has no code block or further content, but separately, the 'Scripts' section introduces a nested resource and then goes directly into a code block with only one line of prose — marginally acceptable. More critically, the very first code block under '## Installation' is preceded only by the sentence ending the paragraph above it in the prior section, but it is properly introduced. However, the 'Canceling a run' section (## Canceling a run) has only a single code block with no introductory prose sentence before it — just the heading and immediately a code block."
+          },
+          {
+            "id": "vestigial-section-TypeScript.md",
+            "description": "The '## Canceling a run' section contains only a single code block and zero prose sentences, making it a very thin section that adds little standalone value and could be folded into the 'Running tasks' or 'Polling for results' section. Similarly, '## Scripts' contains only one sentence of prose and a single-line code block, which is minimal content for its own top-level section."
+          },
+          {
+            "id": "unintroduced-code-TypeScript.md",
+            "description": "The '## Canceling a run' section has no introductory prose before its code block — it goes directly from the heading to a code snippet with no explaining sentence."
+          },
+          {
+            "id": "unintroduced-code-Deployment.md",
+            "description": "The 'Building from source' section contains a code block for building Docker images that is not preceded by any introductory prose sentence — the heading is immediately followed by the code block with only a comment inside it distinguishing the two builds, but no sentence before the block explains what the reader is about to do or why."
+          }
+        ],
+        "approved": 98
       }
     }
   }
