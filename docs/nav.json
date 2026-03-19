@@ -1,0 +1,54 @@
+{
+  "nav": [
+    {
+      "title": "Getting Started",
+      "path": "getting-started"
+    },
+    {
+      "title": "Architecture",
+      "path": "architecture"
+    },
+    {
+      "title": "Guides",
+      "children": [
+        {
+          "title": "Workflows",
+          "path": "workflows"
+        },
+        {
+          "title": "Scripts",
+          "path": "scripts"
+        },
+        {
+          "title": "Browser Automation",
+          "path": "browser-automation"
+        },
+        {
+          "title": "Credentials & Auth",
+          "path": "credentials-auth"
+        },
+        {
+          "title": "Deployment",
+          "path": "deployment"
+        }
+      ]
+    },
+    {
+      "title": "Reference",
+      "children": [
+        {
+          "title": "API Reference",
+          "path": "api-reference"
+        },
+        {
+          "title": "Python SDK",
+          "path": "python-sdk"
+        },
+        {
+          "title": "TypeScript SDK",
+          "path": "typescript-sdk"
+        }
+      ]
+    }
+  ]
+}
