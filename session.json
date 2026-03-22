@@ -8,7 +8,7 @@
   "phase": "ready",
   "status": "active",
   "createdAt": "2026-03-22T07:27:04.294Z",
-  "updatedAt": "2026-03-22T08:03:25.227Z",
+  "updatedAt": "2026-03-22T08:03:36.307Z",
   "gatherState": {
     "status": "approved",
     "report": {
@@ -92,8 +92,8 @@
       "path": "quickstart.md",
       "pageType": "Quickstart",
       "outcome": "What's inside of the doc-plan. install SDK, Run task cloud browser by default, see results and watch recording, optional run with local browser instead - one code snippet showing the difference.",
-      "phase": "review",
-      "status": "idle",
+      "phase": "done",
+      "status": "done",
       "report": {
         "blocking": [
           {
