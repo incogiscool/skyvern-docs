@@ -20,6 +20,6 @@ Skyvern is available in three forms. Pick the one that matches how you work:
 
 ---
 
-> **Scope of this documentation:** This site covers the **API and Python SDK**. For the no-code Cloud UI, visit [app.skyvern.com](https://app.skyvern.com). For infrastructure setup, see [Self-Hosted Deployment](self-hosted-deployment.md).
+> **Scope of this documentation:** This site covers the **API and Python SDK**. For the no-code Cloud UI, visit [app.skyvern.com](https://app.skyvern.com). For infrastructure setup, see [Self-Hosted Deployment](/self-hosted/overview).
 
-Ready to run your first automation? Continue to the [Quickstart](quickstart.md).
+Ready to run your first automation? Continue to the [Quickstart](/getting-started/quickstart).
