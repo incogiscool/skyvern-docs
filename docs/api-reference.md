@@ -536,11 +536,11 @@ When a site requires a time-based one-time password (TOTP) or a code sent by ema
 
 There are three options:
 
-**Option 1 — Stored authenticator secret:** Supply the TOTP base32 secret when creating a credential (the `totp` field). Skyvern generates codes automatically. No extra work at runtime.
+**Option 1: Stored authenticator secret** Supply the TOTP base32 secret when creating a credential (the `totp` field). Skyvern generates codes automatically. No extra work at runtime.
 
-**Option 2 — Pull from your endpoint:** Set `totp_url` when starting the run. Skyvern polls that URL for codes as needed. Your endpoint should return `{"code": "123456"}`.
+**Option 2: Pull from your endpoint** Set `totp_url` when starting the run. Skyvern polls that URL for codes as needed. Your endpoint should return `{"code": "123456"}`.
 
-**Option 3 — Push from your system:** Set `totp_identifier` when starting the run (typically an email address or phone number). When you receive the 2FA message, call `send_totp_code` to deliver it:
+**Option 3: Push from your system** Set `totp_identifier` when starting the run (typically an email address or phone number). When you receive the 2FA message, call `send_totp_code` to deliver it:
 
 ```http
 POST /v1/totp
