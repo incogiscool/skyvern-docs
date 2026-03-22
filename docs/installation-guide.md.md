@@ -277,4 +277,4 @@ Once you can run the examples above without errors, you're in good shape to go d
 - **Tasks**: Use `run_task()` for single-goal automations. Add `data_extraction_schema` for structured output and `max_steps` for cost control.
 - **Credentials**: Store login credentials once with `create_credential()`, then have the agent handle authentication automatically with `page.agent.login(credential_id=...)`.
 - **Workflows**: Chain multiple steps into a reusable workflow using `run_workflow()`. Workflows are defined in the UI or via the API and identified by a `wpid_` ID.
-- **Browser sessions**: Use `launch_cloud_browser()` to open a persistent session you can resume across multiple task runs, useful for sites that need you to stay logged in.
+- **Browser sessions**: Use `launch_cloud_browser()` to start a new cloud browser session, or `use_cloud_browser()` to reuse the most recent existing session across multiple task runs — useful for sites that need you to stay logged in.
