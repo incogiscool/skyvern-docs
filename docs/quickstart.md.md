@@ -107,7 +107,7 @@ if artifacts:
 
 By default, Skyvern spins up a managed browser on its own servers. If you want to watch the automation happen live on your machine — or need to reach a site that is only accessible from your network — you can point the Skyvern Cloud API at a browser running locally.
 
-**Before you start:** this option requires [ngrok](https://ngrok.com) to be installed and authenticated (`ngrok authtoken <your-token>`). See the [Connect Local Browser](../running-tasks/connect-local-browser) guide for full setup details and security notes.
+**Before you start:** this option requires [ngrok](https://ngrok.com) to be installed and authenticated (`ngrok authtoken <your-token>`). See the [Connect Local Browser](../optimization/browser-tunneling) guide for full setup details and security notes.
 
 Start the local browser server in a separate terminal:
 
