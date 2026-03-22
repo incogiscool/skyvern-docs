@@ -290,7 +290,9 @@ Returns the debug artifacts produced during a run: screenshots, HTML snapshots, 
 |---|---|---|
 | `artifact_type` | `string` (repeatable) | Filter to specific artifact types. |
 
-Available `artifact_type` values: `recording`, `screenshot`, `screenshot_llm`, `screenshot_action`, `screenshot_final`, `html`, `llm_prompt`, `llm_request`, `llm_response`, `visible_elements_tree`, `har`, `trace`, `pdf`, `browser_console_log`.
+Available `artifact_type` values:
+
+`recording`, `screenshot`, `screenshot_llm`, `screenshot_action`, `screenshot_final`, `html`, `llm_prompt`, `llm_request`, `llm_response`, `visible_elements_tree`, `har`, `trace`, `pdf`, `browser_console_log`
 
 ```python
 artifacts = client.get_run_artifacts(run_id="tsk_01j9abc123")
