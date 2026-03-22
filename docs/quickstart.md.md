@@ -17,22 +17,25 @@ Run your first browser automation task with Skyvern in under five minutes.
 pip install skyvern
 ```
 
-That's the only dependency you need to start running tasks against Skyvern Cloud. The SDK ships with a synchronous `Skyvern` client and an `AsyncSkyvern` client for use in async codebases.
+That's the only dependency you need to start running tasks against Skyvern Cloud. The SDK ships with a synchronous `Skyvern` client and an `AsyncSkyvern` client for use in async codebases. Both are importable from `skyvern.client`.
 
 ### 2. Get your API key
 
-Log into [app.skyvern.com](https://app.skyvern.com), navigate to **Settings**, and copy your API key. You can pass it directly when constructing the client, or export it as an environment variable and let the SDK pick it up automatically:
+Log into [app.skyvern.com](https://app.skyvern.com), navigate to **Settings**, and copy your API key. You can pass it directly when constructing the client, or read it from the environment yourself:
 
 ```bash
 export SKYVERN_API_KEY="your_api_key_here"
 ```
 
 ```python
+import os
+from skyvern.client import Skyvern
+
 # Explicit — useful for scripts and notebooks
 client = Skyvern(api_key="YOUR_API_KEY")
 
-# Implicit — reads SKYVERN_API_KEY from the environment
-client = Skyvern()
+# From environment variable
+client = Skyvern(api_key=os.environ["SKYVERN_API_KEY"])
 ```
 
 ### 3. Run a task
@@ -43,7 +46,7 @@ Paste the snippet below into a file called `run_task.py`, replace `YOUR_API_KEY`
 
 ```python
 import time
-from skyvern import Skyvern
+from skyvern.client import Skyvern
 
 client = Skyvern(api_key="YOUR_API_KEY")
 
@@ -74,13 +77,14 @@ python run_task.py
 | Field | Type | Description |
 |---|---|---|
 | `run_id` | `str` | Unique task identifier, prefixed `tsk_` |
-| `status` | `str` | `created` · `queued` · `running` · `completed` · `failed` |
+| `status` | `str` | `created` · `queued` · `running` · `completed` · `failed` · `timed_out` · `terminated` · `canceled` |
 | `output` | `object \| None` | Extracted data; `None` until the task completes |
-| `failure_reason` | `str \| None` | Set when `status` is `failed` |
+| `failure_reason` | `str \| None` | Set when `status` is `failed` or `terminated` |
 | `app_url` | `str \| None` | Deep link to this run in the Skyvern UI |
 | `recording_url` | `str \| None` | Direct URL of the session recording video |
 | `screenshot_urls` | `list[str] \| None` | Per-step screenshots |
-| `created_at` / `finished_at` | `datetime` | Timestamps for the full run lifecycle |
+| `created_at` | `datetime` | Timestamp when the run was created |
+| `finished_at` | `datetime \| None` | Timestamp when the run finished; `None` while still running |
 
 ### 4. See the results and watch the recording
 
@@ -111,7 +115,7 @@ Start the local browser server in a separate terminal:
 skyvern browser serve --tunnel
 ```
 
-This launches Chrome on your machine, starts a CDP proxy server, and creates an ngrok tunnel so Skyvern Cloud can connect to it. When it's ready, the command prints a `wss://` URL. Pass that URL as `browser_address` in your task call — everything else stays the same:
+This launches Chrome on your machine, starts a CDP proxy server, and creates an ngrok tunnel so Skyvern Cloud can connect to it. When it's ready, the command prints a **CDP URL** in the form `wss://<ngrok-host>/devtools/browser/<browser-id>`. Pass that full URL as `browser_address` in your task call — everything else stays the same:
 
 ```python
 # Cloud browser (default) — no extra arguments needed
@@ -120,11 +124,11 @@ run = client.run_task(
     prompt="Find the top 3 posts on Hacker News today.",
 )
 
-# Local browser — add browser_address with the tunnel URL from `skyvern browser serve --tunnel`
+# Local browser — paste the full CDP URL printed by `skyvern browser serve --tunnel`
 run = client.run_task(
     url="https://news.ycombinator.com",
     prompt="Find the top 3 posts on Hacker News today.",
-    browser_address="wss://abc123.ngrok-free.dev",
+    browser_address="wss://<ngrok-host>/devtools/browser/<browser-id>",
 )
 ```
 
@@ -144,4 +148,4 @@ After completing these steps you have:
 - **Authentication** — store credentials with `create_credential()` and reference them in your prompt so Skyvern can log in on your behalf, without embedding passwords in your code.
 - **Multi-step automation** — use Workflows to chain tasks with loops, conditionals, and file handling for processes that span multiple pages or sessions.
 - **Async notification** — pass a `webhook_url` to `run_task()` to receive a callback when the run finishes, instead of polling. This is preferable for long-running tasks or production integrations.
-- **Async client** — swap `Skyvern` for `AsyncSkyvern` and `await` each call for seamless use inside async frameworks like FastAPI or asyncio-based pipelines.
+- **Async client** — swap `from skyvern.client import Skyvern` for `from skyvern.client import AsyncSkyvern` and `await` each call for seamless use inside async frameworks like FastAPI or asyncio-based pipelines.
