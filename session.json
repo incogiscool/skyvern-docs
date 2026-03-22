@@ -8,7 +8,7 @@
   "phase": "ready",
   "status": "active",
   "createdAt": "2026-03-22T07:27:04.294Z",
-  "updatedAt": "2026-03-22T07:49:31.584Z",
+  "updatedAt": "2026-03-22T08:03:25.227Z",
   "gatherState": {
     "status": "approved",
     "report": {
@@ -86,6 +86,23 @@
         "blocking": [],
         "judgments": [],
         "approved": 4
+      }
+    },
+    "quickstart.md": {
+      "path": "quickstart.md",
+      "pageType": "Quickstart",
+      "outcome": "What's inside of the doc-plan. install SDK, Run task cloud browser by default, see results and watch recording, optional run with local browser instead - one code snippet showing the difference.",
+      "phase": "review",
+      "status": "idle",
+      "report": {
+        "blocking": [
+          {
+            "id": "broken-link-quickstart.md",
+            "description": "docs/quickstart.md has a broken internal link to \"../optimization/browser-tunneling\""
+          }
+        ],
+        "judgments": [],
+        "approved": 2
       }
     }
   }
