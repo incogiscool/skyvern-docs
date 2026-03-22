@@ -2,12 +2,25 @@
 
 Skyvern is an AI-powered browser automation platform. This guide gets you from zero to running your first automation in a few minutes, whether you want to use Skyvern Cloud or run everything locally.
 
-## Prerequisites
+**Jump to:**
+- [Choose your setup path](#choose-your-setup-path)
+- [Option 1: Skyvern Cloud](#option-1-skyvern-cloud)
+- [Option 2: Local mode](#option-2-local-mode)
+- [Option 3: Self-hosted with Docker Compose](#self-hosted-with-docker-compose)
+- [Your first automation](#your-first-automation)
+- [Running a task without a browser](#running-a-task-without-a-browser)
+- [Combining Playwright with AI actions](#combining-playwright-with-ai-actions)
+- [Where to go next](#where-to-go-next)
 
-Before you install anything, decide which mode you want to use:
+---
+
+## Choose your setup path
+
+Before you install anything, decide which mode fits your situation:
 
 - **Skyvern Cloud** (simplest): Your Python/TypeScript code sends tasks to Skyvern's servers. No local infrastructure needed. You need a Skyvern account and API key.
-- **Local mode**: Skyvern runs on your machine in-process. Your LLM API keys stay local. You need Python 3.11–3.13 and Node.js installed.
+- **Local mode**: Skyvern runs on your machine in-process. Your LLM API keys stay local. You need Python 3.11–3.13 installed.
+- **Docker Compose**: Run the full Skyvern server (API, UI, database, browser) on your own infrastructure. You need Docker Desktop installed and running.
 
 ---
 
@@ -59,7 +72,7 @@ Python 3.11, 3.12, or 3.13 is required. Python 3.13 support is still in progress
 pip install skyvern
 ```
 
-On **Windows** only, you also need [Rust](https://rustup.rs/) and Visual Studio with the "Desktop development with C++" workload installed before running `pip install skyvern`.
+> **Windows users:** Before running `pip install skyvern`, you also need [Rust](https://rustup.rs/) and Visual Studio with the "Desktop development with C++" workload installed.
 
 ### Step 2: Run the quickstart
 
@@ -92,7 +105,7 @@ async def main():
 
     await page.goto("https://example.com")
     title = await page.title()
-    print(f"Page title: {title}")
+    print(f"Page title: {title}")  # → "Example Domain"
 
     await browser.close()
 
@@ -105,7 +118,7 @@ Run it with `python test.py`. A Chromium window should open, navigate to example
 
 ## Your first automation
 
-With either Cloud or local mode set up, you can start automating. Here's the simplest possible example using the Cloud client:
+With setup complete, you can start automating. The example below uses `page.extract()` to pull structured data from a live site — it's the fastest way to see Skyvern's AI layer in action:
 
 ```python
 import asyncio
@@ -143,11 +156,23 @@ async def main():
 asyncio.run(main())
 ```
 
-`page.extract()` sends the current page to the LLM with your prompt and schema, and returns typed data. The schema is standard JSON Schema, so it works the same way you'd describe a type in OpenAPI.
+`page.extract()` sends the current page to the LLM with your prompt and schema, and returns typed data. The schema is standard JSON Schema, so it works the same way you'd describe a type in OpenAPI. The return value looks like this:
 
-### Running a task without a browser
+```python
+[
+    {"title": "Show HN: I built a thing", "points": 312},
+    {"title": "Ask HN: Best tools for X?", "points": 204},
+    # ...
+]
+```
 
-If you don't need to drive the browser directly and just want Skyvern to accomplish a goal autonomously, use `run_task()` on the client directly. This is the API-only path that doesn't require you to manage a browser session at all:
+---
+
+## Running a task without a browser
+
+If you don't need to drive the browser directly and just want Skyvern to accomplish a goal autonomously, use `run_task()` on the client. This is the API-only path — you hand Skyvern a goal, and it handles all the browsing itself.
+
+A task moves through a predictable lifecycle: `created → queued → running → completed` (or one of the failure states: `failed`, `terminated`, `timed_out`, `canceled`). `run_task()` returns immediately with a `run_id`; you then poll `get_run()` until the status is terminal.
 
 ```python
 import asyncio
@@ -168,7 +193,7 @@ async def main():
 
     print(f"Task started: {task.run_id}")  # run_id starts with "tsk_"
 
-    # Poll until the task finishes
+    # Poll until the task reaches a terminal status
     while True:
         result = await skyvern.get_run(task.run_id)
         print(f"Status: {result.status}")
@@ -181,13 +206,13 @@ async def main():
 asyncio.run(main())
 ```
 
-The `status` field cycles through `created → queued → running → completed` (or one of the failure states). The `output` field contains whatever the agent extracted, structured according to your schema.
+The `output` field contains whatever the agent extracted, structured according to your schema.
 
 ---
 
-## Mixing Playwright and AI actions
+## Combining Playwright with AI actions
 
-One of the more useful patterns is combining standard Playwright calls with AI-powered actions on the same page. Use Playwright for the deterministic parts (navigation, known selectors), and AI for the parts that vary or require reading the page:
+One of the more useful patterns is mixing standard Playwright calls with AI-powered actions on the same page. Use Playwright for the deterministic parts (navigation, known selectors), and AI for the parts that vary or require reading the page:
 
 ```python
 await page.goto("https://myapp.example.com")
@@ -243,7 +268,7 @@ skyvern = Skyvern(
 
 ---
 
-## Next steps
+## Where to go next
 
 Once you can run the examples above without errors, you're in good shape to go deeper:
 
@@ -251,4 +276,3 @@ Once you can run the examples above without errors, you're in good shape to go d
 - **Credentials**: Store login credentials once with `create_credential()`, then have the agent handle authentication automatically with `page.agent.login(credential_id=...)`.
 - **Workflows**: Chain multiple steps into a reusable workflow using `run_workflow()`. Workflows are defined in the UI or via the API and identified by a `wpid_` ID.
 - **Browser sessions**: Use `launch_cloud_browser()` to open a persistent session you can resume across multiple task runs, useful for sites that need you to stay logged in.
-
