@@ -1,0 +1,10 @@
+{
+  "sourceRepo": {
+    "owner": "skyvern-ai",
+    "name": "skyvern"
+  },
+  "outputRepo": {
+    "owner": "incogiscool",
+    "name": "skyvern-docs"
+  }
+}
