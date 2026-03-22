@@ -8,7 +8,7 @@
   "phase": "ready",
   "status": "active",
   "createdAt": "2026-03-22T07:27:04.294Z",
-  "updatedAt": "2026-03-22T08:03:36.307Z",
+  "updatedAt": "2026-03-22T15:25:39.666Z",
   "gatherState": {
     "status": "approved",
     "report": {
@@ -103,6 +103,18 @@
         ],
         "judgments": [],
         "approved": 2
+      }
+    },
+    "installation-guide.md": {
+      "path": "installation-guide.md",
+      "pageType": "Installation Guide",
+      "outcome": "Be able to use the SDK easily.",
+      "phase": "review",
+      "status": "idle",
+      "report": {
+        "blocking": [],
+        "judgments": [],
+        "approved": 4
       }
     }
   }
