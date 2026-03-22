@@ -4,6 +4,47 @@ Skyvern exposes a REST API and a Python SDK (`skyvern`) that mirror each other o
 
 ---
 
+## Contents
+
+- [Authentication](#authentication)
+- [Run statuses](#run-statuses)
+- [Tasks](#tasks)
+  - [Run a task](#run-a-task)
+  - [Choose an engine](#choose-an-engine)
+- [Retrieve, poll, and manage runs](#retrieve-poll-and-manage-runs)
+  - [Get a run](#get-a-run)
+  - [Cancel a run](#cancel-a-run)
+  - [Get run artifacts](#get-run-artifacts)
+  - [Get run timeline](#get-run-timeline)
+  - [Retry a webhook](#retry-a-webhook)
+- [Workflows](#workflows)
+  - [Run a workflow](#run-a-workflow)
+  - [List workflows](#list-workflows)
+  - [Get a workflow](#get-a-workflow)
+  - [Create a workflow](#create-a-workflow)
+  - [List workflow runs](#list-workflow-runs)
+- [Credentials](#credentials)
+  - [Create a credential](#create-a-credential)
+  - [List credentials](#list-credentials)
+  - [Delete a credential](#delete-a-credential)
+- [2FA / TOTP](#2fa--totp)
+  - [Option 1: Stored authenticator secret](#option-1-stored-authenticator-secret)
+  - [Option 2: Pull from your endpoint](#option-2-pull-from-your-endpoint)
+  - [Option 3: Push from your system](#option-3-push-from-your-system)
+- [Browser Sessions](#browser-sessions)
+  - [Create a session](#create-a-session)
+  - [Get a session](#get-a-session)
+  - [List active sessions](#list-active-sessions)
+  - [Close a session](#close-a-session)
+- [Proxy Locations](#proxy-locations)
+- [Webhooks](#webhooks)
+  - [Verifying webhook signatures](#verifying-webhook-signatures)
+  - [Example webhook payload](#example-webhook-payload)
+- [Async Python SDK](#async-python-sdk)
+- [Error responses](#error-responses)
+
+---
+
 ## Authentication
 
 Every request must include your API key in the `x-api-key` header.
@@ -70,9 +111,9 @@ Starts a new task and returns immediately. The task runs asynchronously; poll `G
 |---|---|---|---|
 | `prompt` | `string` | **required** | The goal for Skyvern to accomplish, in plain language. |
 | `url` | `string` | `null` | Starting URL. If omitted, Skyvern infers an appropriate URL from the prompt. |
-| `engine` | `string` | `"skyvern-2.0"` | Agent engine. See [engines](#engines) below. |
+| `engine` | `string` | `"skyvern-2.0"` | Agent engine. See [Choose an engine](#choose-an-engine) below. |
 | `title` | `string` | `null` | Human-readable label for this run. |
-| `proxy_location` | `string` or `GeoTarget` | `"RESIDENTIAL"` | Proxy region. See [proxy locations](#proxy-locations). |
+| `proxy_location` | `string` or `GeoTarget` | `"RESIDENTIAL"` | Proxy region. See [Proxy Locations](#proxy-locations). |
 | `data_extraction_schema` | `object` or `array` or `string` | `null` | JSON Schema describing the structured output you want. When supplied, `output` in the response will conform to this shape. |
 | `error_code_mapping` | `object` | `null` | Map error descriptions to short codes. For example, `{"Invalid credentials": "LOGIN_FAILED"}`. |
 | `max_steps` | `integer` | `null` | Hard cap on agent steps. The task fails if this is exceeded. Charged per step. |
@@ -86,6 +127,10 @@ Starts a new task and returns immediately. The task runs asynchronously; poll `G
 **Python SDK**
 
 ```python
+from skyvern import Skyvern
+
+client = Skyvern(api_key="YOUR_API_KEY")
+
 response = client.run_task(
     prompt="Search for 'Skyvern' on Google and return the first three result titles.",
     url="https://google.com",
@@ -135,13 +180,13 @@ curl -X POST https://api.skyvern.com/v1/run/tasks \
 }
 ```
 
-The `run_id` starting with `tsk_` identifies this as a task run. Use it to poll for results.
+The `run_id` starting with `tsk_` identifies this as a task run. Use it to poll for results or cancel the run. Workflow runs use `wr_` as their prefix instead.
 
 ---
 
-#### Engines
+### Choose an engine
 
-The `engine` field controls which agent model drives the run.
+The `engine` field controls which agent model drives the run. `skyvern-2.0` is the right default for most tasks; the other options are best suited to specific scenarios or when you want to run against a particular model directly.
 
 | Value | When to use |
 |---|---|
@@ -153,7 +198,7 @@ The `engine` field controls which agent model drives the run.
 
 ---
 
-## Getting run results
+## Retrieve, poll, and manage runs
 
 ### Get a run
 
@@ -199,6 +244,9 @@ A common polling pattern while waiting for a run to finish:
 
 ```python
 import time
+from skyvern import Skyvern
+
+client = Skyvern(api_key="YOUR_API_KEY")
 
 def wait_for_run(client, run_id, poll_interval=5):
     terminal = {"completed", "failed", "terminated", "timed_out", "canceled"}
@@ -463,7 +511,9 @@ POST /v1/credentials
 **Password credential**
 
 ```python
-from skyvern import NonEmptyPasswordCredential
+from skyvern import Skyvern, NonEmptyPasswordCredential
+
+client = Skyvern(api_key="YOUR_API_KEY")
 
 cred = client.create_credential(
     name="My Amazon Login",
@@ -532,15 +582,19 @@ client.delete_credential(credential_id="cred_01jabc")
 
 ## 2FA / TOTP
 
-When a site requires a time-based one-time password (TOTP) or a code sent by email/SMS, you need to route that code to Skyvern during the run.
+When a site requires a time-based one-time password (TOTP) or a code sent by email/SMS, you need to route that code to Skyvern during the run. There are three ways to do this, depending on how much control you have over the authentication flow.
 
-There are three options:
+### Option 1: Stored authenticator secret
 
-**Option 1: Stored authenticator secret** Supply the TOTP base32 secret when creating a credential (the `totp` field). Skyvern generates codes automatically. No extra work at runtime.
+Supply the TOTP base32 secret when creating a credential (the `totp` field). Skyvern generates codes automatically at runtime — no extra work required when starting runs.
 
-**Option 2: Pull from your endpoint** Set `totp_url` when starting the run. Skyvern polls that URL for codes as needed. Your endpoint should return `{"code": "123456"}`.
+### Option 2: Pull from your endpoint
 
-**Option 3: Push from your system** Set `totp_identifier` when starting the run (typically an email address or phone number). When you receive the 2FA message, call `send_totp_code` to deliver it:
+Set `totp_url` when starting the run. Skyvern polls that URL for codes as needed. Your endpoint should return `{"code": "123456"}`.
+
+### Option 3: Push from your system
+
+Set `totp_identifier` when starting the run (typically an email address or phone number). When you receive the 2FA message, call `send_totp_code` to deliver it:
 
 ```http
 POST /v1/totp
@@ -588,6 +642,10 @@ POST /v1/browser_sessions
 | `extensions` | `array` | `null` | Browser extensions to install: `"ad-blocker"`, `"captcha-solver"`. |
 
 ```python
+from skyvern import Skyvern
+
+client = Skyvern(api_key="YOUR_API_KEY")
+
 session = client.create_browser_session(
     timeout=120,
     proxy_location="RESIDENTIAL_GB",
@@ -598,6 +656,16 @@ session_id = session.browser_session_id  # "pbs_..."
 Once you have a session ID, pass `browser_session_id` to any `run_task` or `run_workflow` call to attach that run to the session. The browser continues from wherever the previous run left off.
 
 ```python
+import time
+
+def wait_for_run(client, run_id, poll_interval=5):
+    terminal = {"completed", "failed", "terminated", "timed_out", "canceled"}
+    while True:
+        run = client.get_run(run_id=run_id)
+        if run.status in terminal:
+            return run
+        time.sleep(poll_interval)
+
 # Log in once
 login_run = client.run_task(
     prompt="Log in to example.com with username admin@example.com and password secret123",
@@ -659,7 +727,7 @@ client.close_browser_session(browser_session_id="pbs_01jabc")
 
 ## Proxy Locations
 
-The `proxy_location` field on task and workflow runs routes browser traffic through a residential proxy in the chosen region.
+The `proxy_location` field on task and workflow runs routes browser traffic through a residential proxy in the chosen region. Pass the string value directly, or use a `GeoTarget` object for city or state-level precision.
 
 | Value | Region |
 |---|---|
@@ -718,7 +786,6 @@ To verify:
 ```python
 import hashlib
 import hmac
-import json
 
 def verify_skyvern_webhook(
     raw_body: bytes,
