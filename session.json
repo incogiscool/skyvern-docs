@@ -8,7 +8,7 @@
   "phase": "ready",
   "status": "active",
   "createdAt": "2026-03-22T07:27:04.294Z",
-  "updatedAt": "2026-03-22T15:26:02.396Z",
+  "updatedAt": "2026-03-22T15:44:40.376Z",
   "gatherState": {
     "status": "approved",
     "report": {
@@ -115,6 +115,23 @@
         "blocking": [],
         "judgments": [],
         "approved": 4
+      }
+    },
+    "api-reference.md": {
+      "path": "api-reference.md",
+      "pageType": "API Reference",
+      "outcome": "Be able to communicate and develop with the API",
+      "phase": "review",
+      "status": "idle",
+      "report": {
+        "blocking": [],
+        "judgments": [
+          {
+            "id": "thin-section-api-reference.md",
+            "description": "The '## Tasks' section contains only one sentence ('A task is a single browser automation goal. You give Skyvern a `prompt` and an optional `url`, and it figures out the rest.') before its subsections, but those two sentences do provide meaningful context, so this is borderline. However, the '## Retrieve, poll, and manage runs' section has no introductory content at all before its subsections — it is just a heading acting as a label with zero descriptive sentences, which adds no value beyond organizing the subsections."
+          }
+        ],
+        "approved": 3
       }
     }
   }
