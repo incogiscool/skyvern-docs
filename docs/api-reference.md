@@ -116,6 +116,11 @@ Starts a new task and returns immediately. The task runs asynchronously; poll `G
 | `proxy_location` | `string` or `GeoTarget` | `"RESIDENTIAL"` | Proxy region. See [Proxy Locations](#proxy-locations). |
 | `data_extraction_schema` | `object` or `array` or `string` | `null` | JSON Schema describing the structured output you want. When supplied, `output` in the response will conform to this shape. |
 | `error_code_mapping` | `object` | `null` | Map error descriptions to short codes. For example, `{"Invalid credentials": "LOGIN_FAILED"}`. |
+
+Advanced fields:
+
+| Field | Type | Default | Description |
+|---|---|---|---|
 | `max_steps` | `integer` | `null` | Hard cap on agent steps. The task fails if this is exceeded. Charged per step. |
 | `webhook_url` | `string` | `null` | URL to POST a completion payload to when the run finishes. |
 | `totp_identifier` | `string` | `null` | Identifier used when pushing a 2FA code to Skyvern (option 3 of TOTP flow). |
