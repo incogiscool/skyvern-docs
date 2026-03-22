@@ -103,7 +103,7 @@ run = client.run_task(
 
 The polling, results, and recording all work identically. The only difference is where the browser process runs.
 
-> `--tunnel` requires ngrok to be installed and authenticated (`ngrok authtoken <your-token>`). See the [Connect Local Browser](../running-tasks/connect-local-browser) guide for full setup details, security notes, and how to configure a manual tunnel.
+> `--tunnel` requires ngrok to be installed and authenticated (`ngrok authtoken <your-token>`). See the [Connect Local Browser](../optimization/browser-tunneling) guide for full setup details, security notes, and how to configure a manual tunnel.
 
 ## What you verified
 
