@@ -174,6 +174,7 @@ curl -X POST https://api.skyvern.com/v1/run/tasks \
 ```json
 {
   "run_id": "tsk_01j9abc123",
+  "run_type": "task_v2",
   "status": "created",
   "output": null,
   "failure_reason": null,
@@ -181,7 +182,7 @@ curl -X POST https://api.skyvern.com/v1/run/tasks \
   "screenshot_urls": null,
   "created_at": "2025-01-15T10:30:00Z",
   "modified_at": "2025-01-15T10:30:00Z",
-  "app_url": "https://app.skyvern.com/runs/tsk_01j9abc123"
+  "app_url": "https://app.skyvern.com/tasks/tsk_01j9abc123"
 }
 ```
 
@@ -196,7 +197,7 @@ The `engine` field controls which agent model drives the run. `skyvern-2.0` is t
 | Value | When to use |
 |---|---|
 | `skyvern-2.0` | Default. Best for complex, multi-step tasks and anything involving dynamic pages. |
-| `skyvern-1.0` | Simple single-page tasks: form filling, basic searches. Faster and cheaper. |
+| `skyvern-1.0` | Simple single-page tasks: form filling, basic searches. |
 | `openai-cua` | OpenAI's Computer Use Agent model. |
 | `anthropic-cua` | Anthropic's Claude Sonnet 3.7 with computer use. |
 | `ui-tars` | UI-TARS model. |
@@ -379,7 +380,6 @@ Starts a workflow run. The `workflow_id` must start with `wpid_`.
 | `totp_url` | `string` | `null` | 2FA pull URL. |
 | `browser_session_id` | `string` | `null` | Persistent browser session to attach. |
 | `browser_profile_id` | `string` | `null` | Browser profile to load (restores cookies and localStorage). |
-| `max_steps_override` | `integer` | `null` | Override the per-task step limit for this run. |
 | `extra_http_headers` | `object` | `null` | Additional browser HTTP headers. |
 
 ```python
@@ -433,7 +433,7 @@ GET /v1/workflows/{workflow_id}
 Returns a workflow's definition and metadata.
 
 ```python
-wf = client.get_workflow(workflow_id="wpid_01jabc")
+wf = client.get_workflow(workflow_permanent_id="wpid_01jabc")
 print(wf.title)
 print(wf.workflow_definition)  # block definitions, parameters
 ```
@@ -465,7 +465,7 @@ blocks:
     navigation_goal: "Navigate to the pricing page"
 """
 )
-print(workflow.workflow_id)  # "wpid_..."
+print(workflow.workflow_permanent_id)  # "wpid_..."
 ```
 
 ---
@@ -643,8 +643,8 @@ POST /v1/browser_sessions
 | Field | Type | Default | Description |
 |---|---|---|---|
 | `timeout` | `integer` | `60` | Minutes until the session auto-expires (5–1440). |
-| `proxy_location` | `string` | `"RESIDENTIAL"` | Proxy region for the session's browser. |
-| `browser_type` | `string` | `null` | `"chrome"` or `"msedge"`. |
+| `proxy_location` | `string` | `null` | Proxy region for the session's browser. |
+| `browser_type` | `string` | `null` | `"chrome"`, `"msedge"`, or `"stealth-chromium"`. |
 | `browser_profile_id` | `string` | `null` | Profile ID (`bp_...`) to load into the session. |
 | `extensions` | `array` | `null` | Browser extensions to install: `"ad-blocker"`, `"captcha-solver"`. |
 
