@@ -18,9 +18,9 @@ Skyvern is an AI-powered browser automation platform. This guide gets you from z
 
 Before you install anything, decide which mode fits your situation:
 
-- **Skyvern Cloud** (simplest): Your Python/TypeScript code sends tasks to Skyvern's servers. No local infrastructure needed. You need a Skyvern account and API key.
-- **Local mode**: Skyvern runs on your machine in-process. Your LLM API keys stay local. You need Python 3.11–3.13 installed.
-- **Docker Compose**: Run the full Skyvern server (API, UI, database, browser) on your own infrastructure. You need Docker Desktop installed and running.
+- **Skyvern Cloud** (simplest): Your Python/TypeScript code sends tasks to Skyvern's servers — no local infrastructure needed, just a Skyvern account and API key.
+- **Local mode**: Skyvern runs on your machine in-process with your LLM API keys staying local; requires Python 3.11–3.13.
+- **Docker Compose**: Run the full Skyvern server (API, UI, database, browser) on your own infrastructure; requires Docker Desktop.
 
 ---
 
@@ -82,13 +82,15 @@ skyvern quickstart
 
 This command walks you through the first-time setup interactively. It:
 
-1. Prompts you to choose a setup method (in-process or Docker Compose).
-2. Asks which LLM provider you want to use and where to find its API key.
-3. Creates a `.env` file in your current directory with all the configuration.
-4. Installs Playwright browsers (`playwright install chromium`).
-5. Sets up the local SQLite database.
+1. Prompts you to choose a setup method (in-process or Docker Compose)
+2. Asks which LLM provider you want to use and where to find its API key
+3. Creates a `.env` file in your current directory with all the configuration
+4. Installs Playwright browsers (`playwright install chromium`)
+5. Sets up the local SQLite database
 
-After it completes, the `.env` file contains a locally generated `SKYVERN_API_KEY` value alongside your LLM configuration. That key is what `Skyvern.local()` reads automatically.
+After it completes, the `.env` file contains a locally generated `SKYVERN_API_KEY` value alongside your LLM configuration.
+
+That key is what `Skyvern.local()` reads automatically.
 
 ### Step 3: Verify the setup
 
