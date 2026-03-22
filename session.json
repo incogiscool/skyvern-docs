@@ -8,7 +8,7 @@
   "phase": "ready",
   "status": "active",
   "createdAt": "2026-03-22T07:27:04.294Z",
-  "updatedAt": "2026-03-22T07:37:10.826Z",
+  "updatedAt": "2026-03-22T07:48:56.284Z",
   "gatherState": {
     "status": "approved",
     "report": {
@@ -75,5 +75,18 @@
       "approved": 28
     }
   },
-  "docs": {}
+  "docs": {
+    "introduction.md": {
+      "path": "introduction.md",
+      "pageType": "Introduction",
+      "outcome": "What is shown in the introduction notes inside of the doc-plan.",
+      "phase": "review",
+      "status": "idle",
+      "report": {
+        "blocking": [],
+        "judgments": [],
+        "approved": 4
+      }
+    }
+  }
 }
