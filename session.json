@@ -8,7 +8,7 @@
   "phase": "ready",
   "status": "active",
   "createdAt": "2026-03-22T07:27:04.294Z",
-  "updatedAt": "2026-03-22T15:44:40.376Z",
+  "updatedAt": "2026-03-22T15:45:13.837Z",
   "gatherState": {
     "status": "approved",
     "report": {
@@ -121,8 +121,8 @@
       "path": "api-reference.md",
       "pageType": "API Reference",
       "outcome": "Be able to communicate and develop with the API",
-      "phase": "review",
-      "status": "idle",
+      "phase": "done",
+      "status": "done",
       "report": {
         "blocking": [],
         "judgments": [
