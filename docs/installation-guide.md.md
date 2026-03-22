@@ -66,7 +66,7 @@ Local mode runs an embedded Skyvern server in-process. There's no separate Docke
 
 ### Step 1: Install Python dependencies
 
-Python 3.11, 3.12, or 3.13 is required. Python 3.13 support is still in progress as of this writing, so 3.11 or 3.12 is the safe choice.
+Python 3.11–3.13 is required; 3.13 support is still in progress, so 3.11 or 3.12 is the safe choice.
 
 ```bash
 pip install skyvern
