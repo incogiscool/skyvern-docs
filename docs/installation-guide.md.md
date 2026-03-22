@@ -62,7 +62,7 @@ const client = new SkyvernClient({ apiKey: "your-api-key" });
 
 ## Option 2: Local mode
 
-Local mode runs an embedded Skyvern server in-process. There's no separate Docker daemon or external service to manage. What runs locally: the Skyvern agent, an SQLite database, and a Playwright-controlled Chromium browser. What you supply: an LLM API key (OpenAI, Anthropic, Gemini, or others).
+Local mode runs an embedded Skyvern server in-process. There's no separate Docker daemon or external service to manage. What runs locally: the Skyvern agent, a PostgreSQL database (in a Docker container), and a Playwright-controlled Chromium browser. What you supply: an LLM API key (OpenAI, Anthropic, Gemini, or others).
 
 ### Step 1: Install Python dependencies
 
@@ -82,11 +82,11 @@ skyvern quickstart
 
 This command walks you through the first-time setup interactively. It:
 
-1. Prompts you to choose a setup method (in-process or Docker Compose)
+1. Prompts you to choose "local" or "cloud" deployment; choose "local" for in-process mode
 2. Asks which LLM provider you want to use and where to find its API key
 3. Creates a `.env` file in your current directory with all the configuration
 4. Installs Playwright browsers (`playwright install chromium`)
-5. Sets up the local SQLite database
+5. Sets up a PostgreSQL database (starts a Docker container if Docker is available)
 
 After it completes, the `.env` file contains a locally generated `SKYVERN_API_KEY` value alongside your LLM configuration.
 
