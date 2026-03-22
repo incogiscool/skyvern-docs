@@ -2,6 +2,8 @@
 
 Run your first browser automation task with Skyvern in under five minutes.
 
+**On this page:** [Prerequisites](#prerequisites) · [Install the SDK](#1-install-the-sdk) · [Get your API key](#2-get-your-api-key) · [Run a task](#3-run-a-task) · [Inspect results](#4-see-the-results-and-watch-the-recording) · [Local browser (optional)](#optional-run-with-a-local-browser-instead) · [Next steps](#next-steps)
+
 ## Prerequisites
 
 - Python 3.11, 3.12, or 3.13
@@ -19,11 +21,25 @@ That's the only dependency you need to start running tasks against Skyvern Cloud
 
 ### 2. Get your API key
 
-Log into [app.skyvern.com](https://app.skyvern.com), navigate to **Settings**, and copy your API key.
+Log into [app.skyvern.com](https://app.skyvern.com), navigate to **Settings**, and copy your API key. You can pass it directly when constructing the client, or export it as an environment variable and let the SDK pick it up automatically:
+
+```bash
+export SKYVERN_API_KEY="your_api_key_here"
+```
+
+```python
+# Explicit — useful for scripts and notebooks
+client = Skyvern(api_key="YOUR_API_KEY")
+
+# Implicit — reads SKYVERN_API_KEY from the environment
+client = Skyvern()
+```
 
 ### 3. Run a task
 
-Paste the snippet below into a file called `run_task.py`, replace `YOUR_API_KEY`, and run it.
+`run_task()` returns immediately with a `run_id` (prefixed `tsk_`) and an initial status of `created` or `queued` — the task runs asynchronously on Skyvern's infrastructure. Poll `get_run()` every few seconds until the status leaves the active set (`created`, `queued`, `running`) and settles on a terminal state: `completed`, `failed`, or similar.
+
+Paste the snippet below into a file called `run_task.py`, replace `YOUR_API_KEY`, and run it:
 
 ```python
 import time
@@ -53,7 +69,18 @@ print(f"View in UI: {run.app_url}")
 python run_task.py
 ```
 
-`run_task()` returns immediately with a `run_id` (prefixed `tsk_`) and an initial status of `created` or `queued`. The task runs asynchronously on Skyvern's infrastructure, so you poll `get_run()` every few seconds until the status moves out of the active set (`created`, `queued`, `running`) and settles on `completed`, `failed`, or another terminal state.
+**What `get_run()` returns** — the response object includes:
+
+| Field | Type | Description |
+|---|---|---|
+| `run_id` | `str` | Unique task identifier, prefixed `tsk_` |
+| `status` | `str` | `created` · `queued` · `running` · `completed` · `failed` |
+| `output` | `object \| None` | Extracted data; `None` until the task completes |
+| `failure_reason` | `str \| None` | Set when `status` is `failed` |
+| `app_url` | `str \| None` | Deep link to this run in the Skyvern UI |
+| `recording_url` | `str \| None` | Direct URL of the session recording video |
+| `screenshot_urls` | `list[str] \| None` | Per-step screenshots |
+| `created_at` / `finished_at` | `datetime` | Timestamps for the full run lifecycle |
 
 ### 4. See the results and watch the recording
 
@@ -74,7 +101,9 @@ if artifacts:
 
 ## Optional: run with a local browser instead
 
-By default, Skyvern spins up a managed browser on its own servers. If you want to watch the automation happen live on your machine, or need to reach a site that is only accessible from your network, you can point the Skyvern Cloud API at a browser running locally.
+By default, Skyvern spins up a managed browser on its own servers. If you want to watch the automation happen live on your machine — or need to reach a site that is only accessible from your network — you can point the Skyvern Cloud API at a browser running locally.
+
+**Before you start:** this option requires [ngrok](https://ngrok.com) to be installed and authenticated (`ngrok authtoken <your-token>`). See the [Connect Local Browser](../running-tasks/connect-local-browser) guide for full setup details and security notes.
 
 Start the local browser server in a separate terminal:
 
@@ -82,9 +111,7 @@ Start the local browser server in a separate terminal:
 skyvern browser serve --tunnel
 ```
 
-This launches Chrome on your machine, starts a CDP proxy server, and creates an ngrok tunnel so Skyvern Cloud can connect to it. When it's ready, the command prints a `wss://` URL.
-
-Then pass that URL as `browser_address` in your task call. Everything else stays the same:
+This launches Chrome on your machine, starts a CDP proxy server, and creates an ngrok tunnel so Skyvern Cloud can connect to it. When it's ready, the command prints a `wss://` URL. Pass that URL as `browser_address` in your task call — everything else stays the same:
 
 ```python
 # Cloud browser (default) — no extra arguments needed
@@ -103,8 +130,6 @@ run = client.run_task(
 
 The polling, results, and recording all work identically. The only difference is where the browser process runs.
 
-> `--tunnel` requires ngrok to be installed and authenticated (`ngrok authtoken <your-token>`). See the [Connect Local Browser](../running-tasks/connect-local-browser) guide for full setup details, security notes, and how to configure a manual tunnel.
-
 ## What you verified
 
 After completing these steps you have:
@@ -115,7 +140,8 @@ After completing these steps you have:
 
 ## Next steps
 
-- **Structured output** — add a `data_extraction_schema` (JSON Schema) to `run_task()` to get typed, predictable data back instead of free-form text
-- **Authentication** — store credentials with `create_credential()` and reference them in your prompt so Skyvern can log in on your behalf
-- **Multi-step automation** — use Workflows to chain tasks with loops, conditionals, and file handling
-- **Async notification** — pass a `webhook_url` to `run_task()` to receive a callback when the run finishes, instead of polling
+- **Structured output** — add a `data_extraction_schema` (JSON Schema) to `run_task()` to get typed, predictable data back instead of free-form text. This is the recommended pattern whenever downstream code needs to parse the agent's findings.
+- **Authentication** — store credentials with `create_credential()` and reference them in your prompt so Skyvern can log in on your behalf, without embedding passwords in your code.
+- **Multi-step automation** — use Workflows to chain tasks with loops, conditionals, and file handling for processes that span multiple pages or sessions.
+- **Async notification** — pass a `webhook_url` to `run_task()` to receive a callback when the run finishes, instead of polling. This is preferable for long-running tasks or production integrations.
+- **Async client** — swap `Skyvern` for `AsyncSkyvern` and `await` each call for seamless use inside async frameworks like FastAPI or asyncio-based pipelines.
