@@ -5,7 +5,7 @@ Run your first browser automation task with Skyvern in under five minutes.
 ## Prerequisites
 
 - Python 3.11, 3.12, or 3.13
-- A Skyvern Cloud account and API key — sign up at [app.skyvern.com](https://app.skyvern.com) (includes $5 in free credits)
+- A Skyvern Cloud account and API key - sign up at [app.skyvern.com](https://app.skyvern.com) (includes $5 in free credits)
 
 ## Steps
 
@@ -31,7 +31,7 @@ from skyvern import Skyvern
 
 client = Skyvern(api_key="YOUR_API_KEY")
 
-# Submit the task — the browser runs on Skyvern's servers by default
+# Submit the task - the browser runs on Skyvern's servers by default
 run = client.run_task(
     url="https://news.ycombinator.com",
     prompt="Find the top 3 posts on Hacker News today and return their titles and URLs.",
@@ -59,10 +59,10 @@ python run_task.py
 
 Once the task is `completed`, `run.output` holds whatever the agent extracted. Open `run.app_url` in your browser to see the full picture inside the Skyvern UI:
 
-- **Actions** — every step the agent took, each paired with a screenshot of the browser state after that action
-- **Recording** — a full video of the session from start to finish
-- **Parameters** — the prompt and URL you submitted
-- **Diagnostics** — annotated screenshots, the element tree, and the raw LLM requests, which are useful when the agent goes in an unexpected direction
+- **Actions** - every step the agent took, each paired with a screenshot of the browser state after that action
+- **Recording** - a full video of the session from start to finish
+- **Parameters** - the prompt and URL you submitted
+- **Diagnostics** - annotated screenshots, the element tree, and the raw LLM requests, which are useful when the agent goes in an unexpected direction
 
 You can also pull the recording URL directly from the SDK if you want to store or display it in your own tooling:
 
@@ -87,13 +87,13 @@ This launches Chrome on your machine, starts a CDP proxy server, and creates an 
 Then pass that URL as `browser_address` in your task call. Everything else stays the same:
 
 ```python
-# Cloud browser (default) — no extra arguments needed
+# Cloud browser (default) - no extra arguments needed
 run = client.run_task(
     url="https://news.ycombinator.com",
     prompt="Find the top 3 posts on Hacker News today.",
 )
 
-# Local browser — add browser_address with the tunnel URL from `skyvern browser serve --tunnel`
+# Local browser - add browser_address with the tunnel URL from `skyvern browser serve --tunnel`
 run = client.run_task(
     url="https://news.ycombinator.com",
     prompt="Find the top 3 posts on Hacker News today.",
@@ -115,7 +115,7 @@ After completing these steps you have:
 
 ## Next steps
 
-- **Structured output** — add a `data_extraction_schema` (JSON Schema) to `run_task()` to get typed, predictable data back instead of free-form text
-- **Authentication** — store credentials with `create_credential()` and reference them in your prompt so Skyvern can log in on your behalf
-- **Multi-step automation** — use Workflows to chain tasks with loops, conditionals, and file handling
-- **Async notification** — pass a `webhook_url` to `run_task()` to receive a callback when the run finishes, instead of polling
+- **Structured output** - add a `data_extraction_schema` (JSON Schema) to `run_task()` to get typed, predictable data back instead of free-form text
+- **Authentication** - store credentials with `create_credential()` and reference them in your prompt so Skyvern can log in on your behalf
+- **Multi-step automation** - use Workflows to chain tasks with loops, conditionals, and file handling
+- **Async notification** - pass a `webhook_url` to `run_task()` to receive a callback when the run finishes, instead of polling
