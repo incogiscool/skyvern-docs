@@ -13,7 +13,7 @@
   "phase": "ready",
   "status": "active",
   "createdAt": "2026-03-23T22:57:26.055Z",
-  "updatedAt": "2026-03-23T23:04:20.961Z",
+  "updatedAt": "2026-03-23T23:19:08.158Z",
   "gatherState": {
     "status": "approved",
     "report": {
@@ -35,5 +35,23 @@
       "approved": 18
     }
   },
-  "docs": {}
+  "docs": {
+    "quickstart.md": {
+      "path": "quickstart.md",
+      "pageType": "Quickstart",
+      "outcome": "They should be able to quickly start using the SDK",
+      "phase": "review",
+      "status": "idle",
+      "report": {
+        "blocking": [],
+        "judgments": [
+          {
+            "id": "weak-opening-quickstart.md",
+            "description": "Current opening: 'Get Skyvern running and automate your first browser task in under five minutes.' This sentence states the time promise but omits the WHY — it doesn't tell a developer what Skyvern actually does or why automating a browser task with it is valuable. A reader who lands here cold has no context. Suggested stronger opening: 'Skyvern uses AI to control a real browser on your behalf — this guide walks you through installing it and running your first automated browser task in under five minutes.'"
+          }
+        ],
+        "approved": 7
+      }
+    }
+  }
 }
