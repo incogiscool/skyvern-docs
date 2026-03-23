@@ -9,17 +9,9 @@ Get Skyvern running and automate your first browser task in under five minutes.
 
 If you want to run the browser locally on your machine (so you can watch it work), you'll also need Node.js and npm for the browser install step.
 
----
-
-## Choose your setup path
-
-**Use Skyvern Cloud (Option A)** if you want the fastest start: your code runs locally, the browser runs on Skyvern's infrastructure, and there's no local server to configure.
-
-**Run locally (Option B)** if you want to watch the browser in real time, automate sites on a private network, or debug your prompts interactively. This requires a two-minute setup to configure an LLM provider and install Chromium.
-
----
-
 ## Option A: Skyvern Cloud (no local setup)
+
+The fastest path — your code runs locally, the browser runs on Skyvern's infrastructure. Choose Option B instead if you need to watch the browser in real time, reach a private network, or debug prompts interactively.
 
 ### 1. Install the SDK
 
