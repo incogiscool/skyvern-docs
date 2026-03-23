@@ -1,9 +1,39 @@
 {
   "id": "01KMEEMZAX9J9ES4H0675YJNN7",
+  "organization": {
+    "id": "Q8HgjtSoKPY3e9lnyvbAsQmi3YPDwSJH",
+    "name": "Manicule",
+    "slug": "manicule"
+  },
   "projectName": "test",
   "sourceRepoOwner": "skyvern-ai",
   "sourceRepoName": "skyvern",
   "outputRepoOwner": "incogiscool",
   "outputRepoName": "skyvern-docs",
-  "createdAt": "2026-03-23T22:57:24.727Z"
+  "phase": "ready",
+  "status": "active",
+  "createdAt": "2026-03-23T22:57:26.055Z",
+  "updatedAt": "2026-03-23T23:04:20.961Z",
+  "gatherState": {
+    "status": "approved",
+    "report": {
+      "blocking": [],
+      "judgments": [
+        {
+          "id": "many-open-questions",
+          "description": "open-questions.md has 20 unresolved items (more than 5). Consider whether some can be answered by deeper source code exploration before moving on."
+        },
+        {
+          "id": "thin-section-overview",
+          "description": "context-index.md section \"## overview\" appears thin (2 non-empty lines, recommend at least 5). Consider expanding with more detail from the source code."
+        },
+        {
+          "id": "no-recent-changes",
+          "description": "No mention of recent commits or changes in context-index.md. Consider running run(\"git log --oneline -20\") on /source to capture recent development activity."
+        }
+      ],
+      "approved": 18
+    }
+  },
+  "docs": {}
 }
