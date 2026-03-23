@@ -47,14 +47,14 @@ The returned `TaskRunResponse` object has these fields:
 |---|---|---|
 | `run_id` | `str` | Unique identifier (`tsk_…` for tasks, `wr_…` for workflows) |
 | `status` | `str` | `"created"` → `"queued"` → `"running"` → `"completed"` / `"failed"` / `"terminated"` / `"timed_out"` / `"canceled"` |
-| `output` | `dict \| None` | Extracted data; `None` until the task completes |
+| `output` | `dict \| list \| str \| None` | Extracted data; `None` until the task completes |
 | `failure_reason` | `str \| None` | Human-readable explanation when `status` is `"failed"` or `"terminated"` |
 | `recording_url` | `str \| None` | URL to a video recording of the browser session |
 | `app_url` | `str \| None` | Link to the run in the Skyvern dashboard |
 
 ### 3. Verify it worked
 
-`task.status` should be `"completed"` and `task.output` will contain the extracted text. Open `task.app_url` in your browser to watch a recording of exactly what the agent did.
+`task.status` should be `"completed"` and `task.output` will contain the extracted text. Open `task.app_url` in your browser to view the run in the Skyvern dashboard, or `task.recording_url` to watch a video recording of what the agent did.
 
 ---
 
@@ -164,7 +164,7 @@ print(data)  # {"balance": 1234.56}
 
 ## TypeScript
 
-If you're working in TypeScript, install `@skyvern/client` instead:
+If you're working in TypeScript, install `@skyvern/client` instead. Node.js 18 or later is required.
 
 ```bash
 npm install @skyvern/client
@@ -182,7 +182,7 @@ const task = await client.runTask({
     },
 });
 
-console.log(task.runId);   // "tsk_..."
+console.log(task.run_id);   // "tsk_..."
 console.log(task.status);  // "running" — poll until this is a final status
 ```
 
@@ -199,7 +199,7 @@ async function waitForRun(client: SkyvernClient, runId: string, intervalMs = 200
     }
 }
 
-const result = await waitForRun(client, task.runId);
+const result = await waitForRun(client, task.run_id);
 console.log(result.status);  // "completed"
 console.log(result.output);  // {"answer": "..."}
 ```
