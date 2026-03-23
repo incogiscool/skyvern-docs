@@ -97,6 +97,6 @@ Beyond the SDK, Skyvern connects to the tools your team already uses:
 Start with the Quickstart to get a task running in under five minutes, then explore the reference docs as your needs grow:
 
 - **[Quickstart](quickstart.md)**: get a task running on Skyvern Cloud or locally.
-- **[Run Tasks](running-tasks/run-tasks.md)**: full reference for task parameters, data extraction schemas, webhooks, and proxy configuration.
-- **[Workflows](workflows/manage-workflows.md)**: how to build, run, and manage multi-step automations.
-- **[Credentials](credentials/overview.md)**: storing and using passwords, credit cards, and TOTP codes.
+- **[Run Tasks](../running-tasks/run-tasks.md)**: full reference for task parameters, data extraction schemas, webhooks, and proxy configuration.
+- **[Workflows](../workflows/manage-workflows.md)**: how to build, run, and manage multi-step automations.
+- **[Credentials](../credentials/overview.md)**: storing and using passwords, credit cards, and TOTP codes.
