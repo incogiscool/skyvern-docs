@@ -1,6 +1,6 @@
 # Quickstart
 
-Get Skyvern running and automate your first browser task in under five minutes.
+Skyvern uses AI to control a real browser on your behalf. This guide walks you through installing it and running your first automated browser task in under five minutes.
 
 ## Prerequisites
 
