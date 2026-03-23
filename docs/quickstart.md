@@ -60,7 +60,7 @@ pip install skyvern
 skyvern quickstart
 ```
 
-The `quickstart` command walks you through selecting an LLM provider, sets your API keys, and writes a `.env` file. It also installs Chromium via Playwright. Follow the prompts — the whole thing takes about two minutes.
+The `quickstart` command walks you through selecting an LLM provider, sets your API keys, and writes a `.env` file. It also installs Chromium via Playwright. Follow the prompts. The whole thing takes about two minutes.
 
 ### 2. Run your first task
 
@@ -178,7 +178,7 @@ const task = await client.runTask({
 });
 
 console.log(task.runId);   // tsk_...
-console.log(task.status);  // "running" — poll getRun() until this is a final status
+console.log(task.status);  // "running" (poll getRun() until this is a final status)
 ```
 
 The TypeScript client is a thin API wrapper. Unlike the Python `Skyvern` class, it does not have `wait_for_completion` built in, so you poll `client.getRun(runId)` until `status` reaches a final state: `"completed"`, `"failed"`, `"terminated"`, `"timed_out"`, or `"canceled"`.
@@ -187,7 +187,7 @@ The TypeScript client is a thin API wrapper. Unlike the Python `Skyvern` class, 
 
 ## Next steps
 
-- **[Run Tasks](../running-tasks/run-tasks.md)** — all `run_task` parameters, polling patterns, and webhooks
-- **[Credentials](../credentials/overview.md)** — store and reuse passwords and 2FA secrets securely so the agent can log in to real sites
-- **[Workflows](../workflows/manage-workflows.md)** — chain multiple tasks into reusable, parameterized automation
-- **[Browser Sessions](../browser-sessions/introduction.md)** — keep a browser alive across multiple task runs to maintain login state
+- **[Run Tasks](../running-tasks/run-tasks.md)**: all `run_task` parameters, polling patterns, and webhooks
+- **[Credentials](../credentials/overview.md)**: store and reuse passwords and 2FA secrets securely so the agent can log in to real sites
+- **[Workflows](../workflows/manage-workflows.md)**: chain multiple tasks into reusable, parameterized automation
+- **[Browser Sessions](../browser-sessions/introduction.md)**: keep a browser alive across multiple task runs to maintain login state
