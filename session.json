@@ -13,7 +13,7 @@
   "phase": "ready",
   "status": "active",
   "createdAt": "2026-03-23T22:57:26.055Z",
-  "updatedAt": "2026-03-23T23:46:29.439Z",
+  "updatedAt": "2026-03-23T23:53:29.176Z",
   "gatherState": {
     "status": "approved",
     "report": {
@@ -41,6 +41,18 @@
       "pageType": "Quickstart",
       "outcome": "They should be able to quickly start using the SDK",
       "phase": "chat",
+      "status": "idle",
+      "report": {
+        "blocking": [],
+        "judgments": [],
+        "approved": 8
+      }
+    },
+    "introduction.md": {
+      "path": "introduction.md",
+      "pageType": "Introduction to the app",
+      "outcome": "Understand what and how to use the application",
+      "phase": "review",
       "status": "idle",
       "report": {
         "blocking": [],
