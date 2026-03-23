@@ -57,7 +57,7 @@ print(task.status)  # "completed"
 print(task.output)  # {"answer": "1. ... 2. ... 3. ..."}
 ```
 
-`run_task` accepts a natural language `prompt` describing your goal, an optional starting `url`, and a handful of parameters that control output shape, cost limits, and authentication. The returned object exposes `task.status` (one of `"completed"`, `"failed"`, `"timed_out"`, or `"terminated"`) and `task.output` (the extracted data as a dict, list, or string).
+`run_task` accepts a natural language `prompt` describing your goal, an optional starting `url`, and a handful of parameters that control output shape, cost limits, and authentication. The returned object exposes `task.status` (one of `"completed"`, `"failed"`, `"timed_out"`, `"terminated"`, or `"canceled"`) and `task.output` (the extracted data as a dict, list, or string).
 
 If you want the browser to appear on your own machine instead — useful for debugging, accessing internal tools, or watching the automation live — run `skyvern quickstart` first to configure a local server, then point the client at `http://localhost:8000`.
 
@@ -79,8 +79,8 @@ Understanding three concepts covers the majority of what Skyvern does.
 
 The `engine` parameter (type: `str`, default: `"skyvern-2.0"`) controls how Skyvern approaches navigation:
 
-- `skyvern-2.0` — the current flagship agent, best for complex multi-step tasks. Scores 85.85% on the WebVoyager benchmark.
-- `skyvern-1.0` — lighter and faster, well-suited to simple single-goal tasks like filling a form or pulling a search result.
+- `skyvern-2.0` — the current flagship agent, best for complex multi-step tasks. Scores 85.8% on the WebVoyager benchmark.
+- `skyvern-1.0` — lower cost, well-suited to simple single-goal tasks like filling a form or pulling a search result.
 - `openai-cua` — delegates navigation directly to OpenAI's computer-use model.
 - `anthropic-cua` — delegates navigation directly to Anthropic's computer-use model.
 
@@ -88,8 +88,8 @@ The `engine` parameter (type: `str`, default: `"skyvern-2.0"`) controls how Skyv
 
 Beyond the SDK, Skyvern connects to the tools your team already uses:
 
-- **MCP server**: AI coding assistants like Claude, Cursor, and Windsurf can control a browser directly through the Model Context Protocol, with 35 exposed tools covering navigation, extraction, and credential management.
-- **CLI**: `skyvern run`, `skyvern workflow`, and `skyvern tasks` let you trigger automations from the terminal or CI pipelines.
+- **MCP server**: AI coding assistants like Claude, Cursor, and Windsurf can control a browser directly through the Model Context Protocol, with 39 exposed tools covering navigation, extraction, and credential management.
+- **CLI**: `skyvern workflow run` and `skyvern tasks` let you trigger automations from the terminal or CI pipelines. (`skyvern run` starts services — the server, UI, and MCP server.)
 - **No-code platforms**: native integrations for Zapier, Make, n8n, and Workato are available for teams that prefer workflow automation tools.
 
 ## Where to go next
