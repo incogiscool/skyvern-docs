@@ -11,9 +11,15 @@ If you want to run the browser locally on your machine (so you can watch it work
 
 ---
 
-## Option A: Skyvern Cloud (no local setup)
+## Choose your setup path
 
-The fastest path. Your code runs locally, the browser runs on Skyvern's infrastructure.
+**Use Skyvern Cloud (Option A)** if you want the fastest start: your code runs locally, the browser runs on Skyvern's infrastructure, and there's no local server to configure.
+
+**Run locally (Option B)** if you want to watch the browser in real time, automate sites on a private network, or debug your prompts interactively. This requires a two-minute setup to configure an LLM provider and install Chromium.
+
+---
+
+## Option A: Skyvern Cloud (no local setup)
 
 ### 1. Install the SDK
 
@@ -33,7 +39,7 @@ task = asyncio.run(
     skyvern.run_task(
         prompt="Go to news.ycombinator.com and return the titles of the top 3 posts.",
         url="https://news.ycombinator.com",
-        wait_for_completion=True,
+        wait_for_completion=True,  # bool, default False — blocks until the task reaches a final status
     )
 )
 
@@ -43,15 +49,24 @@ print(task.output)   # {"answer": "1. ... 2. ... 3. ..."}
 
 Replace `YOUR_API_KEY` with the key from your settings page. When you run this, Skyvern opens a browser session on its cloud servers, navigates to Hacker News, reads the page, and returns the result. You don't need to think about browsers, proxies, or Playwright.
 
+The returned `TaskRunResponse` object has these fields:
+
+| Field | Type | Description |
+|---|---|---|
+| `run_id` | `str` | Unique identifier (`tsk_…` for tasks, `wr_…` for workflows) |
+| `status` | `str` | `"created"` → `"queued"` → `"running"` → `"completed"` / `"failed"` / `"terminated"` / `"timed_out"` / `"canceled"` |
+| `output` | `dict \| None` | Extracted data; `None` until the task completes |
+| `failure_reason` | `str \| None` | Human-readable explanation when `status` is `"failed"` or `"terminated"` |
+| `recording_url` | `str \| None` | URL to a video recording of the browser session |
+| `app_url` | `str \| None` | Link to the run in the Skyvern dashboard |
+
 ### 3. Verify it worked
 
-`task.status` should be `"completed"` and `task.output` will contain the extracted text. You can also open `task.app_url` in your browser to watch a recording of exactly what the agent did.
+`task.status` should be `"completed"` and `task.output` will contain the extracted text. Open `task.app_url` in your browser to watch a recording of exactly what the agent did.
 
 ---
 
 ## Option B: Run locally (browser opens on your machine)
-
-Use this when you want to see the browser in real time, access sites on a local network, or debug your prompts interactively.
 
 ### 1. Install the SDK and run setup
 
@@ -60,7 +75,7 @@ pip install skyvern
 skyvern quickstart
 ```
 
-The `quickstart` command walks you through selecting an LLM provider, sets your API keys, and writes a `.env` file. It also installs Chromium via Playwright. Follow the prompts. The whole thing takes about two minutes.
+The `quickstart` command walks you through selecting an LLM provider, sets your API keys, and writes a `.env` file. It also installs Chromium via Playwright. Follow the prompts — the whole thing takes about two minutes.
 
 ### 2. Run your first task
 
@@ -69,7 +84,7 @@ import asyncio
 from skyvern import Skyvern
 
 async def main():
-    skyvern = Skyvern.local()  # reads your .env file
+    skyvern = Skyvern.local()  # reads your .env file; raises if it doesn't exist
 
     browser = await skyvern.launch_local_browser()
     page = await browser.get_working_page()
@@ -80,8 +95,8 @@ async def main():
         "Return the titles of the top 3 posts on this page."
     )
 
-    print(result.status)
-    print(result.output)
+    print(result.status)   # "completed"
+    print(result.output)   # {"answer": "1. ... 2. ... 3. ..."}
 
     await browser.close()
 
@@ -139,9 +154,7 @@ await page.goto("https://example.com/login")
 await page.fill("#email", "you@example.com")
 
 # AI-powered: handle anything you don't want to hard-code
-await page.act("Click the Sign In button")
-
-# Validate the result with AI
+await page.act("Click the Sign In button")          # returns None
 logged_in = await page.validate("Confirm the user is now logged in")
 print(logged_in)  # True or False
 
@@ -153,7 +166,7 @@ data = await page.extract(
 print(data)  # {"balance": 1234.56}
 ```
 
-`page.act()` performs an action described in plain English. `page.validate()` returns `True` or `False`. `page.extract()` returns structured data. These three methods cover most situations where you would otherwise need brittle selectors or custom scraping logic.
+`page.act(prompt)` performs an action described in plain English and returns `None`. `page.validate(prompt)` returns `True` or `False`. `page.extract(prompt, schema)` returns a dict shaped by the schema you provide. These three methods cover most situations where you would otherwise need brittle selectors or custom scraping logic.
 
 ---
 
@@ -177,11 +190,27 @@ const task = await client.runTask({
     },
 });
 
-console.log(task.runId);   // tsk_...
-console.log(task.status);  // "running" (poll getRun() until this is a final status)
+console.log(task.runId);   // "tsk_..."
+console.log(task.status);  // "running" — poll until this is a final status
 ```
 
-The TypeScript client is a thin API wrapper. Unlike the Python `Skyvern` class, it does not have `wait_for_completion` built in, so you poll `client.getRun(runId)` until `status` reaches a final state: `"completed"`, `"failed"`, `"terminated"`, `"timed_out"`, or `"canceled"`.
+The TypeScript client is a thin API wrapper and does not have `wait_for_completion` built in. Poll `client.getRun(runId)` until `status` reaches a final state:
+
+```typescript
+const FINAL_STATUSES = new Set(["completed", "failed", "terminated", "timed_out", "canceled"]);
+
+async function waitForRun(client: SkyvernClient, runId: string, intervalMs = 2000) {
+    while (true) {
+        const run = await client.getRun(runId);
+        if (FINAL_STATUSES.has(run.status)) return run;
+        await new Promise(r => setTimeout(r, intervalMs));
+    }
+}
+
+const result = await waitForRun(client, task.runId);
+console.log(result.status);  // "completed"
+console.log(result.output);  // {"answer": "..."}
+```
 
 ---
 
