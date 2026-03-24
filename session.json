@@ -13,7 +13,7 @@
   "phase": "ready",
   "status": "active",
   "createdAt": "2026-03-23T22:57:26.055Z",
-  "updatedAt": "2026-03-24T01:34:15.280Z",
+  "updatedAt": "2026-03-24T01:36:43.466Z",
   "gatherState": {
     "status": "approved",
     "report": {
@@ -81,8 +81,8 @@
       "path": "skyvern-cloud-ui.md",
       "pageType": "Core Concepts",
       "outcome": "How to use the skyvern ui",
-      "phase": "review",
-      "status": "idle",
+      "phase": "done",
+      "status": "done",
       "report": {
         "blocking": [],
         "judgments": [],
