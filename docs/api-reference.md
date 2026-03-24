@@ -87,11 +87,11 @@ const run = await skyvern.runTask({
 
 The `engine` field controls which agent handles the task:
 
-- **`skyvern-2.0`** (default) — Skyvern's latest agent. Best for complex, multi-step tasks. Returns a `tsk_v2_` run ID.
-- **`skyvern-1.0`** — Previous agent. Good for simple, single-page tasks like form filling. Returns a `tsk_` run ID.
-- **`openai-cua`** — Uses OpenAI's Computer Use Agent model.
-- **`anthropic-cua`** — Uses Anthropic Claude Sonnet 3.7 with computer use.
-- **`ui-tars`** — Uses the UI-TARS model.
+- **`skyvern-2.0`** (default): Skyvern's latest agent. Best for complex, multi-step tasks. Returns a `tsk_v2_` run ID.
+- **`skyvern-1.0`**: Previous agent. Good for simple, single-page tasks like form filling. Returns a `tsk_` run ID.
+- **`openai-cua`**: Uses OpenAI's Computer Use Agent model.
+- **`anthropic-cua`**: Uses Anthropic Claude Sonnet 3.7 with computer use.
+- **`ui-tars`**: Uses the UI-TARS model.
 
 **Response** — `TaskRunResponse`
 
