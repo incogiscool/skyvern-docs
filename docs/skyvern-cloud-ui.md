@@ -121,6 +121,12 @@ Click the `+` button to open the **block library panel** and add a block to the 
 | Loop Block | Repeats a set of blocks for each item in a list |
 | Code Block | Runs custom Python code |
 | File Parser Block | Parses PDFs, CSVs, Excel files, and images |
+| File Download Block | Downloads files from a website |
+| Cloud Storage Block | Uploads files to cloud storage |
+| Wait Block | Pauses execution for a specified amount of time |
+| HTTP Request Block | Makes an HTTP API call |
+| Print Page Block | Prints the current page to PDF |
+| Workflow Trigger Block | Triggers another workflow |
 
 Click any block node on the canvas to open its edit panel, where you configure goals, data schemas, output variable names, and error handling. Reference workflow parameters in any text field using Jinja syntax — for example, `{{parameter_key}}`.
 
@@ -132,7 +138,7 @@ The editor shows which blocks reference a given parameter. Deleting a parameter 
 
 ### Running a workflow
 
-Clicking the play button in the editor, or clicking **Run** from the workflow list, opens a parameters form at `/workflows/:workflowPermanentId/run`. Fill in a value for each workflow-type parameter and submit to start a run. Advanced options on the same form include proxy location, max screenshot scrolls, webhook callback URL, extra HTTP headers, and run engine selection.
+Clicking the play button in the editor, or clicking **Run** from the workflow list, opens a parameters form at `/workflows/:workflowPermanentId/run`. Fill in a value for each workflow-type parameter and submit to start a run. Advanced options on the same form include proxy location, max screenshot scrolls, webhook callback URL, and extra HTTP headers.
 
 ### Iterating live with the debugger
 
@@ -158,7 +164,7 @@ Each run at `/workflows/:workflowPermanentId/:workflowRunId` has its own detail 
 
 The Runs page (`/runs`) shows every task run and workflow run in a single table, regardless of which section created them. This is the fastest way to get a cross-account view of what's running, what's failed, and what's queued.
 
-You can filter by status — `created`, `running`, `failed`, `terminated`, `completed`, `queued`, `timed_out`, `canceled`, or `paused` — and by trigger type (manual, scheduled, or API). Clicking any row navigates to that run's detail page, whether the run is a task or a workflow run.
+You can filter by status — `created`, `running`, `failed`, `terminated`, `completed`, `queued`, `timed_out`, or `canceled` — and by trigger type (manual, scheduled, or API). Clicking any row navigates to that run's detail page, whether the run is a task or a workflow run.
 
 Search works on both run IDs and parameter values. When a search term matches a workflow parameter, the matching parameter row expands inline without requiring a separate page load.
 
@@ -194,7 +200,7 @@ Browser Sessions (`/browser-sessions`) are persistent, reusable browser instance
 
 To create a session, choose the browser type (Chrome or Microsoft Edge), optionally enable extensions (ad blocker, captcha solver), set a proxy location, and give the session a label. Once the session is open, you can click into it for a real-time view of the browser and interact with it directly.
 
-Sessions are identified by a UUID. To attach a task to a session, copy the session ID and paste it into the CDP address field of the task. The task then runs inside that browser's existing context — with all its cookies and saved state — rather than starting fresh. You can stop or delete sessions at any time from the row actions menu.
+Sessions are identified by a UUID. To attach a run to a session from the Discover or Tasks prompt box, copy the session ID and paste it into the **Browser Session ID** field in the Advanced Settings panel. (The separate **Browser Address** field is for connecting to an arbitrary CDP-compatible browser endpoint, not a Skyvern-managed session.) The task then runs inside that browser's existing context — with all its cookies and saved state — rather than starting fresh. You can stop or delete sessions at any time from the row actions menu.
 
 ---
 
@@ -202,7 +208,7 @@ Sessions are identified by a UUID. To attach a task to a session, copy the sessi
 
 The Settings page (`/settings`) is where you connect Skyvern to external credential stores and manage your API access. Each card on the page corresponds to an integration.
 
-**Settings** lets you select the active environment (local, staging, or production) and organization.
+**Settings** lets you select the active environment and organization.
 
 **API Key** shows the currently active API key in a masked, copyable field. This is the key you use to authenticate SDK and REST API calls.
 
