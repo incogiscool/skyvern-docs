@@ -11,15 +11,15 @@ This page walks through each section of the UI so you know what's where and how 
 The left sidebar is your primary way to move around. It has two groups:
 
 **Build** contains the tools you use to create and monitor automations:
-- **Discover** — a starting page with a prompt box and a carousel of pre-built workflow templates
-- **Workflows** — your library of saved workflows, with a visual editor for each
-- **Runs** — a unified history of every task and workflow run across your account
-- **Schedules** — cron-based triggers for running workflows automatically (feature-flagged; appears when enabled)
-- **Browsers** — persistent browser sessions you can open, reuse, and attach to runs
+- **Discover**: a starting page with a prompt box and a carousel of pre-built workflow templates
+- **Workflows**: your library of saved workflows, with a visual editor for each
+- **Runs**: a unified history of every task and workflow run across your account
+- **Schedules**: cron-based triggers for running workflows automatically (feature-flagged; appears when enabled)
+- **Browsers**: persistent browser sessions you can open, reuse, and attach to runs
 
 **General** contains configuration:
-- **Settings** — API keys, environment selection, and integrations (Bitwarden, 1Password, Azure, custom credential services)
-- **Credentials** — stored passwords, credit cards, secrets, and 2FA codes
+- **Settings**: API keys, environment selection, and integrations (Bitwarden, 1Password, Azure, custom credential services)
+- **Credentials**: stored passwords, credit cards, secrets, and 2FA codes
 
 The sidebar collapses to icon-only mode using the chevron button at the bottom, which is useful on smaller screens.
 
@@ -45,16 +45,16 @@ The Tasks section (`/tasks`) is for one-off browser automations. The page shows 
 
 To create a task with explicit fields rather than a prompt, navigate to `/tasks/create/:template` where template can be one of the built-in sample cases (like `finditparts`, `geico`, `hackernews`) or a saved task ID. The form has:
 
-- **URL** — required; the starting page
-- **Navigation Goal** — what Skyvern should accomplish on the page
-- **Data Extraction Goal** — what information to pull out when done
-- **Navigation Payload** — JSON context Skyvern can reference (usernames, form values, etc.)
-- **Extracted Information Schema** — a JSON Schema that constrains the shape of extracted data
-- **Error Code Mapping** — JSON mapping of failure conditions to custom error codes
-- **Proxy Location** — geographic proxy to use (residential US is the default; options include IE, ES, IN, JP, GB, FR, DE, and many others, plus fine-grained city-level targeting)
-- **Webhook Callback URL** — where to POST results when the task finishes
-- **TOTP Identifier** — links the task to a 2FA credential for sites that require it
-- **CDP Address** — connect to a custom browser via Chrome DevTools Protocol
+- **URL**: required; the starting page
+- **Navigation Goal**: what Skyvern should accomplish on the page
+- **Data Extraction Goal**: what information to pull out when done
+- **Navigation Payload**: JSON context Skyvern can reference (usernames, form values, etc.)
+- **Extracted Information Schema**: a JSON Schema that constrains the shape of extracted data
+- **Error Code Mapping**: JSON mapping of failure conditions to custom error codes
+- **Proxy Location**: geographic proxy to use (residential US is the default; options include IE, ES, IN, JP, GB, FR, DE, and many others, plus fine-grained city-level targeting)
+- **Webhook Callback URL**: where to POST results when the task finishes
+- **TOTP Identifier**: links the task to a 2FA credential for sites that require it
+- **CDP Address**: connect to a custom browser via Chrome DevTools Protocol
 
 At least one of Navigation Goal or Data Extraction Goal is required.
 
@@ -62,13 +62,13 @@ At least one of Navigation Goal or Data Extraction Goal is required.
 
 Once a task is running, its detail page at `/tasks/:taskId` has four tabs:
 
-**Actions** — the main view while a task runs. A live WebSocket stream shows a screenshot updating every few seconds. Once the task finishes, you can click through each action Skyvern took, seeing the screenshot at that moment alongside what was clicked or typed and why. This is where you debug unexpected behavior.
+**Actions**: the main view while a task runs. A live WebSocket stream shows a screenshot updating every few seconds. Once the task finishes, you can click through each action Skyvern took, seeing the screenshot at that moment alongside what was clicked or typed and why. This is where you debug unexpected behavior.
 
-**Recording** — a full video recording of the browser session. Available after the run completes. If no recording was captured, the tab says so rather than failing silently.
+**Recording**: a full video recording of the browser session. Available after the run completes. If no recording was captured, the tab says so rather than failing silently.
 
-**Parameters** — a read-only view of every input field that was sent with this task (URL, goals, payload, schema, proxy, and so on). Useful for reproducing a run or checking what exactly was submitted.
+**Parameters**: a read-only view of every input field that was sent with this task (URL, goals, payload, schema, proxy, and so on). Useful for reproducing a run or checking what exactly was submitted.
 
-**Diagnostics** — the raw step-by-step artifacts from the agent's internal reasoning. Each step has the full element tree, the LLM prompt, and the model's response. This is useful when a task behaves unexpectedly and you want to understand what the model "saw."
+**Diagnostics**: the raw step-by-step artifacts from the agent's internal reasoning. Each step has the full element tree, the LLM prompt, and the model's response. This is useful when a task behaves unexpectedly and you want to understand what the model "saw."
 
 The detail page header shows the current status badge, a cancel button (visible while the task is still running), and options to re-run the task or copy the API command that would reproduce this run.
 
@@ -130,15 +130,15 @@ The debugger (`/workflows/:workflowPermanentId/build`) is a read-alongside-run v
 
 Each run at `/workflows/:workflowPermanentId/:workflowRunId` has its own detail view with:
 
-**Overview** — a live browser stream while the workflow runs, switching to a screenshot view afterward. A timeline on the left lists every block and action in execution order. Clicking an item in the timeline jumps the screenshot to that moment.
+**Overview**: a live browser stream while the workflow runs, switching to a screenshot view afterward. A timeline on the left lists every block and action in execution order. Clicking an item in the timeline jumps the screenshot to that moment.
 
-**Output** — extracted data and downloaded files from the run. If a block produced structured output, it appears here as formatted JSON.
+**Output**: extracted data and downloaded files from the run. If a block produced structured output, it appears here as formatted JSON.
 
-**Code** — if the workflow was run in `code` mode (the default for prompt-generated workflows), this tab shows the generated Python-equivalent script and lets you iterate on it by submitting fix instructions.
+**Code**: if the workflow was run in `code` mode (the default for prompt-generated workflows), this tab shows the generated Python-equivalent script and lets you iterate on it by submitting fix instructions.
 
-**Recording** — a video playback of the full session.
+**Recording**: a video playback of the full session.
 
-**Parameters** — the input values that were used for this run.
+**Parameters**: the input values that were used for this run.
 
 ---
 
@@ -166,13 +166,13 @@ You can also manage schedules from within a workflow's editor by clicking the cl
 
 The Credentials page (`/credentials`) is where you store sensitive values that workflows need to log into sites or fill out forms. It has four tabs:
 
-**Passwords** — stores username/password pairs. Each credential is tested in the background when first saved. You can add, edit, and delete credentials from this tab.
+**Passwords**: stores username/password pairs. Each credential is tested in the background when first saved. You can add, edit, and delete credentials from this tab.
 
-**Credit Cards** — stores card numbers, expiry dates, and billing details for use in checkout flows.
+**Credit Cards**: stores card numbers, expiry dates, and billing details for use in checkout flows.
 
-**Secrets** — stores arbitrary secret values (API keys, tokens, etc.) that blocks can reference by name.
+**Secrets**: stores arbitrary secret values (API keys, tokens, etc.) that blocks can reference by name.
 
-**2FA** — shows incoming TOTP codes. When a workflow encounters a 2FA challenge, Skyvern looks up a code here by the `totp_identifier` field. The tab lets you filter codes by identifier and OTP type, and shows when each code was received.
+**2FA**: shows incoming TOTP codes. When a workflow encounters a 2FA challenge, Skyvern looks up a code here by the `totp_identifier` field. The tab lets you filter codes by identifier and OTP type, and shows when each code was received.
 
 Adding a credential uses a dropdown that opens the appropriate modal (Password, Credit Card, or Secret). Credentials for passwords and credit cards require a Bitwarden-compatible credential service to be configured on the backend.
 
@@ -184,11 +184,11 @@ Browser Sessions (`/browser-sessions`) are persistent, reusable browser instance
 
 From this page you can:
 
-- **Create a session** — choose the browser type (Chrome or Microsoft Edge), enable extensions (ad blocker, captcha solver), set a proxy location, and give the session a label
-- **View session status** — whether it's open or closed, when it was started, how long it's been running
-- **Open a live stream** — click into a session to see a real-time view of the browser and interact with it directly
-- **Copy the session ID** — paste it into the CDP address field of a task to attach that task to this session
-- **Stop or delete sessions** — from the row actions menu
+- **Create a session**: choose the browser type (Chrome or Microsoft Edge), enable extensions (ad blocker, captcha solver), set a proxy location, and give the session a label
+- **View session status**: whether it's open or closed, when it was started, how long it's been running
+- **Open a live stream**: click into a session to see a real-time view of the browser and interact with it directly
+- **Copy the session ID**: paste it into the CDP address field of a task to attach that task to this session
+- **Stop or delete sessions**: from the row actions menu
 
 Sessions are identified by a UUID. Attaching a task to a session passes its `browser_session_id` and the task runs inside that browser's existing context rather than a fresh one.
 
@@ -198,17 +198,17 @@ Sessions are identified by a UUID. Attaching a task to a session passes its `bro
 
 The Settings page (`/settings`) has several cards:
 
-**Settings** — select the active environment (local, staging, production) and organization.
+**Settings**: select the active environment (local, staging, production) and organization.
 
-**API Key** — shows the currently active API key in a masked copyable field. This is the key you use to authenticate SDK and REST API calls.
+**API Key**: shows the currently active API key in a masked copyable field. This is the key you use to authenticate SDK and REST API calls.
 
-**1Password Integration** — enter a 1Password service account token to enable workflows to pull credentials directly from your 1Password vault via workflow parameters.
+**1Password Integration**: enter a 1Password service account token to enable workflows to pull credentials directly from your 1Password vault via workflow parameters.
 
-**Bitwarden Integration** — configure Bitwarden account credentials so workflows can authenticate against a self-hosted or cloud Bitwarden vault.
+**Bitwarden Integration**: configure Bitwarden account credentials so workflows can authenticate against a self-hosted or cloud Bitwarden vault.
 
-**Azure Key Vault** — configure an Azure service principal so workflows can read secrets from Azure Key Vault.
+**Azure Key Vault**: configure an Azure service principal so workflows can read secrets from Azure Key Vault.
 
-**Custom Credential Service** — point Skyvern at a custom HTTP endpoint that returns credentials, for cases where credentials live in an internal system that isn't Bitwarden or Azure.
+**Custom Credential Service**: point Skyvern at a custom HTTP endpoint that returns credentials, for cases where credentials live in an internal system that isn't Bitwarden or Azure.
 
 ---
 
