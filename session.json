@@ -13,7 +13,7 @@
   "phase": "ready",
   "status": "active",
   "createdAt": "2026-03-23T22:57:26.055Z",
-  "updatedAt": "2026-03-24T00:58:48.441Z",
+  "updatedAt": "2026-03-24T01:00:05.350Z",
   "gatherState": {
     "status": "approved",
     "report": {
@@ -64,8 +64,8 @@
       "path": "api-reference.md",
       "pageType": "API Reference",
       "outcome": "They should be able to interact with the API.",
-      "phase": "chat",
-      "status": "idle",
+      "phase": "done",
+      "status": "done",
       "report": {
         "blocking": [],
         "judgments": [
