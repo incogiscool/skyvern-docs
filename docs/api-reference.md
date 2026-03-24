@@ -75,7 +75,7 @@ const run = await skyvern.runTask({
 });
 ```
 
-**Request body — core**
+**Request body — task goal**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
@@ -83,6 +83,11 @@ const run = await skyvern.runTask({
 | `url` | `string \| null` | `null` | Starting URL. If omitted, Skyvern infers one from the prompt. |
 | `engine` | `string` | `"skyvern-2.0"` | Which agent to use. See [engines](#engines) below. |
 | `title` | `string \| null` | `null` | Human-readable label for this run. |
+
+**Request body — output and limits**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
 | `max_steps` | `integer \| null` | `null` | Hard cap on steps. The run fails if this is exceeded. Each step costs credits, so set this to a reasonable value. |
 | `data_extraction_schema` | `object \| array \| string \| null` | `null` | JSON Schema describing the structure of data you want extracted. Providing a schema makes the output more consistent. |
 | `error_code_mapping` | `object \| null` | `null` | Map your own error codes to conditions. Example: `{"login_failed": "The credentials are incorrect"}`. |
