@@ -10,27 +10,40 @@ If you're running Skyvern self-hosted, replace `https://api.skyvern.com` with yo
 
 The API also has Python and TypeScript SDKs that mirror the REST surface:
 
-```python
-# Python
+**Python**
+```bash
 pip install skyvern
-
+```
+```python
 from skyvern import Skyvern
 skyvern = Skyvern(api_key="YOUR_API_KEY")
 ```
 
-```typescript
-// TypeScript
+**TypeScript**
+```bash
 npm install @skyvern/client
-
+```
+```typescript
 import { SkyvernClient } from "@skyvern/client";
 const skyvern = new SkyvernClient({ apiKey: "YOUR_API_KEY" });
 ```
 
 ---
 
+## Contents
+
+- [Runs](#runs) — start tasks and workflows, poll for status, retrieve artifacts
+- [Workflows](#workflows) — create, update, and manage reusable automation definitions
+- [Credentials](#credentials) — store logins, credit cards, and secrets in Skyvern's vault
+- [Browser Sessions](#browser-sessions) — keep a browser alive across multiple runs
+- [Proxy Locations](#proxy-locations) — route browser traffic through geographic proxies
+- [Errors](#errors) — HTTP status codes and failure semantics
+
+---
+
 ## Runs
 
-A **run** is the core unit of work in Skyvern. When you run a task or a workflow, you get back a run object with a `run_id` you can poll for status. Task run IDs start with `tsk_` (v1) or `tsk_v2_` (v2). Workflow run IDs start with `wr_`.
+A **run** is the core unit of work in Skyvern. Submitting a task or triggering a workflow both produce a run object, identified by a `run_id` you poll for status. Task run IDs start with `tsk_` (v1) or `tsk_v2_` (v2). Workflow run IDs start with `wr_`. All run types share the same [Get a run](#get-a-run), [Cancel a run](#cancel-a-run), and [Get run artifacts](#get-run-artifacts) endpoints.
 
 ### Run a task
 
@@ -85,13 +98,15 @@ const run = await skyvern.runTask({
 
 #### Engines
 
-The `engine` field controls which agent handles the task:
+The `engine` field controls which agent handles the task. Use `skyvern-2.0` unless you have a specific reason to switch — it's the most capable and the one Skyvern actively develops.
 
-- **`skyvern-2.0`** (default): Skyvern's latest agent. Best for complex, multi-step tasks. Returns a `tsk_v2_` run ID.
-- **`skyvern-1.0`**: Previous agent. Good for simple, single-page tasks like form filling. Returns a `tsk_` run ID.
-- **`openai-cua`**: Uses OpenAI's Computer Use Agent model.
-- **`anthropic-cua`**: Uses Anthropic Claude Sonnet 3.7 with computer use.
-- **`ui-tars`**: Uses the UI-TARS model.
+| Engine | Best for | Run ID prefix |
+|---|---|---|
+| `skyvern-2.0` | Complex, multi-step tasks; default choice | `tsk_v2_` |
+| `skyvern-1.0` | Simple, single-page tasks like form filling | `tsk_` |
+| `openai-cua` | Tasks where you want OpenAI's Computer Use Agent model | `tsk_v2_` |
+| `anthropic-cua` | Tasks where you want Anthropic Claude Sonnet 3.7 with computer use | `tsk_v2_` |
+| `ui-tars` | Tasks where you want the UI-TARS model | `tsk_v2_` |
 
 **Response** (`TaskRunResponse`)
 
@@ -214,7 +229,7 @@ A run moves through these states:
 - `created` → `queued` → `running` → `completed`
 - Or terminates in: `failed`, `timed_out`, `terminated`, `canceled`
 
-Once a run is in `completed`, `failed`, `timed_out`, `terminated`, or `canceled` it will not change again.
+Once a run reaches `completed`, `failed`, `timed_out`, `terminated`, or `canceled` it will not change again.
 
 **Response** (`RunResponse`, either `TaskRunResponse` or `WorkflowRunResponse` based on `run_type`)
 
@@ -317,7 +332,7 @@ for a in artifacts:
 
 `GET /v1/runs/{run_id}/timeline`
 
-Returns a step-by-step breakdown of what happened during a `task_v2` or `workflow_run`. Each entry in the timeline represents a block execution, showing what the agent did and whether it succeeded.
+Returns a step-by-step breakdown of what happened during a `task_v2` or `workflow_run`. Each entry in the timeline represents a block execution, showing what the agent did and whether it succeeded. Only available for `task_v2` (IDs starting with `tsk_v2_`) and workflow runs (`wr_`). Returns `400` for v1 task runs.
 
 ```python
 timeline = await skyvern.get_run_timeline(run_id="wr_abc123")
@@ -325,15 +340,13 @@ for entry in timeline:
     print(entry)
 ```
 
-Only available for `task_v2` (IDs starting with `tsk_v2_`) and workflow runs (`wr_`). Returns `400` for v1 task runs.
-
 ---
 
 ### Retry run webhook
 
 `POST /v1/runs/{run_id}/retry_webhook`
 
-Re-sends the completion webhook for a finished run. Useful if your webhook endpoint was down or returned an error.
+Re-sends the completion webhook for a finished run. Useful if your webhook endpoint was down or returned an error when the run completed.
 
 ```python
 await skyvern.retry_run_webhook(run_id="tsk_v2_abc123")
@@ -349,7 +362,7 @@ await skyvern.retry_run_webhook(run_id="tsk_v2_abc123")
 
 ## Workflows
 
-Workflows are reusable automation definitions made of blocks. You create them once, then run them with different parameters.
+Workflows are reusable automation definitions made of blocks. You create them once, then run them repeatedly with different parameters — making them ideal for scheduled jobs, batch processing, or any automation you want to version and manage separately from the code that invokes it.
 
 ### Create a workflow
 
@@ -464,25 +477,25 @@ Returns all workflow runs across all workflows for your organization.
 
 **Query parameters**
 
-| Parameter | Type | Description |
-|---|---|---|
-| `page` | `integer` | Page number (default: `1`). |
-| `page_size` | `integer` | Items per page (default: `10`). |
-| `status` | `string[]` | Filter by one or more statuses. |
-| `search_key` | `string` | Search across run ID, parameter keys/values, and extra headers. |
-| `error_code` | `string` | Exact match on the `error_code` in a run's error array (e.g. `LOGIN_FAILED`). |
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `page` | `integer` | `1` | Page number. |
+| `page_size` | `integer` | `10` | Items per page. |
+| `status` | `string[]` | — | Filter by one or more statuses. |
+| `search_key` | `string` | — | Search across run ID, parameter keys/values, and extra headers. |
+| `error_code` | `string` | — | Exact match on the `error_code` in a run's error array (e.g. `LOGIN_FAILED`). |
 
 ---
 
 ## Credentials
 
-Credentials let Skyvern log into sites on your behalf without you ever passing raw secrets through the browser automation. When you reference a credential in a task or workflow, Skyvern fetches it from the vault at runtime.
-
-Credential responses never include the raw secret — only non-sensitive metadata like username, card brand, or last four digits.
+Credentials let Skyvern log into sites on your behalf without you ever passing raw secrets through the browser automation. When you reference a credential in a task or workflow, Skyvern fetches it from the vault at runtime. Credential responses never include the raw secret — only non-sensitive metadata like username, card brand, or last four digits.
 
 ### Create a credential
 
 `POST /v1/credentials`
+
+Skyvern supports three credential types: `password` for site logins, `credit_card` for payment forms, and `secret` for arbitrary tokens or API keys.
 
 ```python
 from skyvern import Skyvern
@@ -554,7 +567,7 @@ await skyvern.create_credential(
 | `secret_value` | `string` | yes | The secret string. |
 | `secret_label` | `string \| null` | no | Optional description of what the secret is. |
 
-**Response** — `CredentialResponse`
+**Response** (`CredentialResponse`)
 
 ```json
 {
@@ -609,7 +622,7 @@ await skyvern.delete_credential(credential_id="cred_abc123")
 
 Forwards a 2FA/MFA code to Skyvern mid-run. Use this when your 2FA arrives via email or SMS and you need to push the code to a running task or workflow.
 
-The flow: start a task with `totp_identifier` set to your email or phone number. When the 2FA email arrives, forward it here. Skyvern parses the code from the message automatically.
+The flow: start a task with `totp_identifier` set to your email or phone number. When the 2FA message arrives, forward its full text here — Skyvern parses the numeric code automatically.
 
 ```python
 await skyvern.send_totp_code(
@@ -660,7 +673,7 @@ print(session.browser_address)      # https://... (CDP address)
 | `browser_type` | `string \| null` | `null` | Browser type. |
 | `extensions` | `array \| null` | `null` | Browser extensions to install. |
 
-**Response** — `BrowserSessionResponse`
+**Response** (`BrowserSessionResponse`)
 
 ```json
 {
