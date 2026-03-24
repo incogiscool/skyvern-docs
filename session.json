@@ -13,7 +13,7 @@
   "phase": "ready",
   "status": "active",
   "createdAt": "2026-03-23T22:57:26.055Z",
-  "updatedAt": "2026-03-24T00:56:04.237Z",
+  "updatedAt": "2026-03-24T00:57:13.764Z",
   "gatherState": {
     "status": "approved",
     "report": {
@@ -64,14 +64,14 @@
       "path": "api-reference.md",
       "pageType": "API Reference",
       "outcome": "They should be able to interact with the API.",
-      "phase": "review",
+      "phase": "chat",
       "status": "idle",
       "report": {
         "blocking": [],
         "judgments": [
           {
             "id": "weak-opening-api-reference.md",
-            "description": "Current opening: 'Skyvern's REST API lives at `https://api.skyvern.com/v1`. Every request must include your API key in the `x-api-key` header.'\n\nWhat's missing: The paragraph jumps straight into the base URL and authentication details without first telling developers WHAT the API enables them to do or WHY they'd use it. A developer landing on this page has no immediate context for what capabilities the API exposes.\n\nSuggested stronger opening sentence: 'The Skyvern API lets you programmatically launch, monitor, and control browser automation tasks—use it to integrate Skyvern's AI-driven web agent into your own applications and workflows.'"
+            "description": "Current opening: 'Skyvern's REST API lives at `https://api.skyvern.com/v1`. Every request must include your API key in the `x-api-key` header.'\n\nWhat's missing: The opening jumps straight into configuration details without explaining WHAT the API reference covers or WHY a developer would use it. There's no statement of purpose — nothing tells the reader what they can accomplish with the API or that this page is their complete reference for all available endpoints and capabilities.\n\nSuggested stronger opening sentence: 'This page is the complete reference for Skyvern's REST API — covering every endpoint you need to create, monitor, and manage browser automation tasks programmatically.'"
           }
         ],
         "approved": 3
