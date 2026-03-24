@@ -32,12 +32,12 @@ const skyvern = new SkyvernClient({ apiKey: "YOUR_API_KEY" });
 
 ## Contents
 
-- [Runs](#runs) — start tasks and workflows, poll for status, retrieve artifacts
-- [Workflows](#workflows) — create, update, and manage reusable automation definitions
-- [Credentials](#credentials) — store logins, credit cards, and secrets in Skyvern's vault
-- [Browser Sessions](#browser-sessions) — keep a browser alive across multiple runs
-- [Proxy Locations](#proxy-locations) — route browser traffic through geographic proxies
-- [Errors](#errors) — HTTP status codes and failure semantics
+- [Runs](#runs): start tasks and workflows, poll for status, retrieve artifacts
+- [Workflows](#workflows): create, update, and manage reusable automation definitions
+- [Credentials](#credentials): store logins, credit cards, and secrets in Skyvern's vault
+- [Browser Sessions](#browser-sessions): keep a browser alive across multiple runs
+- [Proxy Locations](#proxy-locations): route browser traffic through geographic proxies
+- [Errors](#errors): HTTP status codes and failure semantics
 
 ---
 
@@ -75,7 +75,7 @@ const run = await skyvern.runTask({
 });
 ```
 
-**Request body — task goal**
+**Request body: task goal**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
@@ -84,7 +84,7 @@ const run = await skyvern.runTask({
 | `engine` | `string` | `"skyvern-2.0"` | Which agent to use. See [engines](#engines) below. |
 | `title` | `string \| null` | `null` | Human-readable label for this run. |
 
-**Request body — output and limits**
+**Request body: output and limits**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
@@ -94,14 +94,14 @@ const run = await skyvern.runTask({
 | `webhook_url` | `string \| null` | `null` | URL to POST a completion notification to when the run finishes. |
 | `proxy_location` | `string \| object \| null` | `"RESIDENTIAL"` | Geographic proxy to route browser traffic through. See [proxy locations](#proxy-locations). |
 
-**Request body — 2FA / TOTP**
+**Request body: 2FA / TOTP**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `totp_identifier` | `string \| null` | `null` | Identifier used to match incoming TOTP/2FA codes pushed via the [Send TOTP code](#send-totp-code) endpoint. |
 | `totp_url` | `string \| null` | `null` | URL Skyvern polls to fetch TOTP/2FA codes. |
 
-**Request body — advanced**
+**Request body: advanced**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
@@ -113,7 +113,7 @@ const run = await skyvern.runTask({
 
 #### Engines
 
-The `engine` field controls which agent handles the task. Use `skyvern-2.0` unless you have a specific reason to switch — it's the most capable and the one Skyvern actively develops.
+The `engine` field controls which agent handles the task. Use `skyvern-2.0` unless you have a specific reason to switch. It's the most capable and the one Skyvern actively develops.
 
 | Engine | Best for | Run ID prefix |
 |---|---|---|
@@ -377,7 +377,7 @@ await skyvern.retry_run_webhook(run_id="tsk_v2_abc123")
 
 ## Workflows
 
-Workflows are reusable automation definitions made of blocks. You create them once, then run them repeatedly with different parameters — making them ideal for scheduled jobs, batch processing, or any automation you want to version and manage separately from the code that invokes it.
+Workflows are reusable automation definitions made of blocks. You create them once, then run them repeatedly with different parameters, making them ideal for scheduled jobs, batch processing, or any automation you want to version and manage separately from the code that invokes it.
 
 ### Create a workflow
 
@@ -422,7 +422,7 @@ You can also pass raw YAML via the `yaml_definition` field in the JSON body, or 
 
 `POST /v1/workflows/{workflow_id}`
 
-Replaces the definition of an existing workflow. Creates a new version — previous versions are kept and accessible via the versions endpoint.
+Replaces the definition of an existing workflow. Creates a new version; previous versions are kept and accessible via the versions endpoint.
 
 | Path parameter | Description |
 |---|---|
@@ -504,7 +504,7 @@ Returns all workflow runs across all workflows for your organization.
 
 ## Credentials
 
-Credentials let Skyvern log into sites on your behalf without you ever passing raw secrets through the browser automation. When you reference a credential in a task or workflow, Skyvern fetches it from the vault at runtime. Credential responses never include the raw secret — only non-sensitive metadata like username, card brand, or last four digits.
+Credentials let Skyvern log into sites on your behalf without you ever passing raw secrets through the browser automation. When you reference a credential in a task or workflow, Skyvern fetches it from the vault at runtime. Credential responses never include the raw secret, only non-sensitive metadata like username, card brand, or last four digits.
 
 ### Create a credential
 
@@ -637,7 +637,7 @@ await skyvern.delete_credential(credential_id="cred_abc123")
 
 Forwards a 2FA/MFA code to Skyvern mid-run. Use this when your 2FA arrives via email or SMS and you need to push the code to a running task or workflow.
 
-The flow: start a task with `totp_identifier` set to your email or phone number. When the 2FA message arrives, forward its full text here — Skyvern parses the numeric code automatically.
+The flow: start a task with `totp_identifier` set to your email or phone number. When the 2FA message arrives, forward its full text here. Skyvern parses the numeric code automatically.
 
 ```python
 await skyvern.send_totp_code(
@@ -663,7 +663,7 @@ await skyvern.send_totp_code(
 
 ## Browser Sessions
 
-A browser session keeps a browser instance alive across multiple runs. Instead of starting a fresh browser every time, runs using the same session pick up from wherever the previous run left off — useful for multi-step flows that require staying logged in.
+A browser session keeps a browser instance alive across multiple runs. Instead of starting a fresh browser every time, runs using the same session pick up from wherever the previous run left off, which is useful for multi-step flows that require staying logged in.
 
 Session IDs start with `pbs_`.
 
@@ -772,18 +772,18 @@ The `proxy_location` parameter is available on tasks, workflow runs, and browser
 | `RESIDENTIAL_IT` | Italy |
 | `RESIDENTIAL_NL` | Netherlands |
 | `RESIDENTIAL_KR` | South Korea |
-| `US-CA` | California, US — deprecated, routes through `RESIDENTIAL_ISP` |
-| `US-NY` | New York, US — deprecated, routes through `RESIDENTIAL_ISP` |
-| `US-TX` | Texas, US — deprecated, routes through `RESIDENTIAL_ISP` |
-| `US-FL` | Florida, US — deprecated, routes through `RESIDENTIAL_ISP` |
-| `US-WA` | Washington, US — deprecated, routes through `RESIDENTIAL_ISP` |
+| `US-CA` | California, US (deprecated, routes through `RESIDENTIAL_ISP`) |
+| `US-NY` | New York, US (deprecated, routes through `RESIDENTIAL_ISP`) |
+| `US-TX` | Texas, US (deprecated, routes through `RESIDENTIAL_ISP`) |
+| `US-FL` | Florida, US (deprecated, routes through `RESIDENTIAL_ISP`) |
+| `US-WA` | Washington, US (deprecated, routes through `RESIDENTIAL_ISP`) |
 | `RESIDENTIAL_NZ` | New Zealand |
 | `RESIDENTIAL_ZA` | South Africa |
 | `RESIDENTIAL_AR` | Argentina |
 | `RESIDENTIAL_TR` | Turkey |
 | `RESIDENTIAL_PH` | Philippines |
 | `RESIDENTIAL_ISP` | ISP proxy (US) |
-| `NONE` | No proxy — browser uses the server's network directly. |
+| `NONE` | No proxy. The browser uses the server's network directly. |
 
 For city or state-level targeting, pass an object instead of a string:
 
@@ -813,10 +813,10 @@ The API returns standard HTTP status codes. Error bodies follow this shape:
 
 | Status | Meaning |
 |---|---|
-| `400` | Bad request — invalid parameters or request body. |
-| `403` | Forbidden — missing or invalid `x-api-key`. |
-| `404` | Not found — the resource doesn't exist or belongs to a different organization. |
-| `422` | Unprocessable entity — validation failure (e.g. malformed YAML workflow definition). |
-| `500` | Internal server error — something went wrong on Skyvern's side. |
+| `400` | Bad request: invalid parameters or request body. |
+| `403` | Forbidden: missing or invalid `x-api-key`. |
+| `404` | Not found: the resource doesn't exist or belongs to a different organization. |
+| `422` | Unprocessable entity: validation failure (e.g. malformed YAML workflow definition). |
+| `500` | Internal server error: something went wrong on Skyvern's side. |
 
 Runs that fail due to agent behavior (wrong credentials, site unreachable, etc.) do not return HTTP errors. They return `200` with `status: "failed"` and a `failure_reason` string explaining what happened.
