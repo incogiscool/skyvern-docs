@@ -13,7 +13,7 @@
   "phase": "ready",
   "status": "active",
   "createdAt": "2026-03-23T22:57:26.055Z",
-  "updatedAt": "2026-03-23T23:53:29.176Z",
+  "updatedAt": "2026-03-24T00:56:04.237Z",
   "gatherState": {
     "status": "approved",
     "report": {
@@ -58,6 +58,23 @@
         "blocking": [],
         "judgments": [],
         "approved": 8
+      }
+    },
+    "api-reference.md": {
+      "path": "api-reference.md",
+      "pageType": "API Reference",
+      "outcome": "They should be able to interact with the API.",
+      "phase": "review",
+      "status": "idle",
+      "report": {
+        "blocking": [],
+        "judgments": [
+          {
+            "id": "weak-opening-api-reference.md",
+            "description": "Current opening: 'Skyvern's REST API lives at `https://api.skyvern.com/v1`. Every request must include your API key in the `x-api-key` header.'\n\nWhat's missing: The paragraph jumps straight into the base URL and authentication details without first telling developers WHAT the API enables them to do or WHY they'd use it. A developer landing on this page has no immediate context for what capabilities the API exposes.\n\nSuggested stronger opening sentence: 'The Skyvern API lets you programmatically launch, monitor, and control browser automation tasks—use it to integrate Skyvern's AI-driven web agent into your own applications and workflows.'"
+          }
+        ],
+        "approved": 3
       }
     }
   }
