@@ -1,14 +1,29 @@
 # Skyvern Cloud UI
 
-The Skyvern UI at [app.skyvern.com](https://app.skyvern.com) is the visual interface for building, running, and monitoring browser automations without writing code. Everything you can do through the REST API or Python SDK is also available here, but presented as a point-and-click experience with live browser streaming, run history, and a visual workflow editor.
+The Skyvern UI at [app.skyvern.com](https://app.skyvern.com) is the visual interface for building, running, and monitoring browser automations. It covers everything the REST API and Python SDK can do — live browser streaming, a visual workflow editor, run history, credential storage, and scheduled triggers — all without writing code. It's also the fastest way to prototype: describe a task in plain English, click Run, and watch it execute in seconds.
 
 This page walks through each section of the UI so you know what's where and how the pieces fit together.
 
 ---
 
+## On this page
+
+- [How to navigate the UI](#navigation)
+- [Discover — run your first automation](#discover-your-starting-point)
+- [Tasks — quick single-use runs](#tasks-quick-single-use-runs)
+- [Workflows — multi-step automations](#workflows-multi-step-automations)
+- [Runs — unified history](#runs-unified-history)
+- [Schedules — cron triggers](#schedules)
+- [Credentials — passwords, cards, and secrets](#credentials)
+- [Browser Sessions — persistent browsers](#browser-sessions)
+- [Settings — API keys and integrations](#settings)
+- [How the UI connects to the API](#how-the-ui-connects-to-the-api)
+
+---
+
 ## Navigation
 
-The left sidebar is your primary way to move around. It has two groups:
+The left sidebar is your primary way to move around. It has two groups.
 
 **Build** contains the tools you use to create and monitor automations:
 - **Discover**: a starting page with a prompt box and a carousel of pre-built workflow templates
@@ -27,7 +42,7 @@ The sidebar collapses to icon-only mode using the chevron button at the bottom, 
 
 ## Discover: Your Starting Point
 
-The Discover page (`/discover`) is where most automation work begins. It combines two things:
+The Discover page (`/discover`) is where most automation work begins. Type what you want a browser to do, hit Run, and Skyvern handles the rest — no workflow design required upfront.
 
 **The prompt box** sits at the top. You type a plain-English description of what you want a browser to do, optionally provide a starting URL, and click Run. Skyvern generates a workflow from the prompt and immediately starts a run. The default engine is `v2-code`, which generates a reusable script for your task. Advanced settings in the prompt box let you set a proxy location, webhook callback URL, a data extraction schema (as JSON), extra HTTP headers, and whether to save the result as a published workflow.
 
@@ -37,60 +52,59 @@ The Discover page (`/discover`) is where most automation work begins. It combine
 
 ## Tasks: Quick Single-Use Runs
 
-The Tasks section (`/tasks`) is for one-off browser automations. The page shows a prompt box at the top (same as Discover) and below it a toggle between **Run History** and **My Tasks**.
-
-**Run History** shows a paginated list of past task runs from this page. **My Tasks** shows saved task templates you've created manually.
+The Tasks section (`/tasks`) is for one-off browser automations. The page shows a prompt box at the top (same as Discover) and below it a toggle between **Run History** and **My Tasks**. Run History shows a paginated list of past task runs from this page; My Tasks shows saved task templates you've created manually.
 
 ### Creating a task manually
 
-To create a task with explicit fields rather than a prompt, navigate to `/tasks/create/:template` where template can be one of the built-in sample cases (like `finditparts`, `geico`, `hackernews`) or a saved task ID. The form has:
+To create a task with explicit fields rather than a prompt, navigate to `/tasks/create/:template`, where `template` can be one of the built-in sample cases (like `finditparts`, `geico`, `hackernews`) or a saved task ID. At least one of Navigation Goal or Data Extraction Goal is required; all other fields are optional.
 
-- **URL**: required; the starting page
-- **Navigation Goal**: what Skyvern should accomplish on the page
-- **Data Extraction Goal**: what information to pull out when done
-- **Navigation Payload**: JSON context Skyvern can reference (usernames, form values, etc.)
-- **Extracted Information Schema**: a JSON Schema that constrains the shape of extracted data
-- **Error Code Mapping**: JSON mapping of failure conditions to custom error codes
-- **Proxy Location**: geographic proxy to use (residential US is the default; options include IE, ES, IN, JP, GB, FR, DE, and many others, plus fine-grained city-level targeting)
-- **Webhook Callback URL**: where to POST results when the task finishes
-- **TOTP Identifier**: links the task to a 2FA credential for sites that require it
-- **CDP Address**: connect to a custom browser via Chrome DevTools Protocol
+**What the browser should do:**
+- **URL** *(required)* — the starting page
+- **Navigation Goal** — what Skyvern should accomplish on the page
+- **Data Extraction Goal** — what information to pull out when done
+- **Navigation Payload** — JSON context Skyvern can reference (usernames, form values, etc.)
+- **Extracted Information Schema** — a JSON Schema that constrains the shape of extracted data
+- **Error Code Mapping** — JSON mapping of failure conditions to custom error codes
 
-At least one of Navigation Goal or Data Extraction Goal is required.
+**How the browser connects:**
+- **Proxy Location** — geographic proxy to use (residential US is the default; options include IE, ES, IN, JP, GB, FR, DE, and many others, plus fine-grained city-level targeting)
+- **TOTP Identifier** — links the task to a 2FA credential for sites that require it
+- **CDP Address** — connect to a custom browser via Chrome DevTools Protocol
+
+**Where results go:**
+- **Webhook Callback URL** — where to POST results when the task finishes
 
 ### Viewing a task run
 
-Once a task is running, its detail page at `/tasks/:taskId` has four tabs:
+Once a task is running, its detail page at `/tasks/:taskId` has four tabs. The header shows the current status badge, a cancel button (visible while the task is still running), and options to re-run the task or copy the `curl` command that would reproduce this run.
 
-**Actions**: the main view while a task runs. A live WebSocket stream shows a screenshot updating every few seconds. Once the task finishes, you can click through each action Skyvern took, seeing the screenshot at that moment alongside what was clicked or typed and why. This is where you debug unexpected behavior.
+**Actions** is the main view while a task runs. A live WebSocket stream shows a screenshot updating every few seconds. Once the task finishes, you can click through each action Skyvern took, seeing the screenshot at that moment alongside what was clicked or typed and why. This is where you debug unexpected behavior.
 
-**Recording**: a full video recording of the browser session. Available after the run completes. If no recording was captured, the tab says so rather than failing silently.
+**Recording** is a full video recording of the browser session, available after the run completes. If no recording was captured, the tab says so rather than failing silently.
 
-**Parameters**: a read-only view of every input field that was sent with this task (URL, goals, payload, schema, proxy, and so on). Useful for reproducing a run or checking what exactly was submitted.
+**Parameters** is a read-only view of every input field that was sent with this task (URL, goals, payload, schema, proxy, and so on). Useful for reproducing a run or confirming exactly what was submitted.
 
-**Diagnostics**: the raw step-by-step artifacts from the agent's internal reasoning. Each step has the full element tree, the LLM prompt, and the model's response. This is useful when a task behaves unexpectedly and you want to understand what the model "saw."
-
-The detail page header shows the current status badge, a cancel button (visible while the task is still running), and options to re-run the task or copy the API command that would reproduce this run.
+**Diagnostics** contains the raw step-by-step artifacts from the agent's internal reasoning. Each step has the full element tree, the LLM prompt, and the model's response — the place to go when a task behaves unexpectedly and you want to understand what the model "saw."
 
 ---
 
 ## Workflows: Multi-Step Automations
 
-Workflows chain multiple blocks together into a repeatable process. The Workflows section (`/workflows`) shows your full library in a table with search and filtering. Workflows can be organized into folders, bookmarked, and exported as JSON or YAML.
+Workflows chain multiple blocks together into a repeatable, parameterized process. The Workflows section (`/workflows`) shows your full library in a searchable, filterable table. Workflows can be organized into folders, bookmarked, and exported as JSON or YAML.
 
-### The visual editor
+### Building a workflow in the visual editor
 
-Opening a workflow and navigating to **Edit** (`/workflows/:workflowPermanentId/edit`) loads the workflow editor, which is a React Flow canvas. Each workflow is a directed graph of blocks connected by edges.
+Opening a workflow and navigating to **Edit** (`/workflows/:workflowPermanentId/edit`) loads the workflow editor — a canvas where each workflow is a directed graph of blocks connected by edges.
 
-The editor toolbar (top bar) has:
+The editor toolbar at the top contains:
 - A title field you can click to rename the workflow inline
-- A save button (with unsaved-changes detection)
+- A save button with unsaved-changes detection
 - A play button to run the workflow immediately
-- A schedule button (clock icon) to open the schedule panel
+- A clock icon to open the schedule panel
 - A parameters button to open the parameters panel
 - A history button to view past versions
 
-The **block library panel** slides in from the right when you click the `+` button. Available block types are:
+Click the `+` button to open the **block library panel** and add a block to the canvas. Available block types are:
 
 | Block | What it does |
 |-------|-------------|
@@ -108,45 +122,43 @@ The **block library panel** slides in from the right when you click the `+` butt
 | Code Block | Runs custom Python code |
 | File Parser Block | Parses PDFs, CSVs, Excel files, and images |
 
-Each block node on the canvas has an edit panel you open by clicking the block. Within that panel you configure goals, data schemas, output variable names, error handling, and references to workflow parameters using Jinja syntax (`{{parameter_key}}`).
+Click any block node on the canvas to open its edit panel, where you configure goals, data schemas, output variable names, and error handling. Reference workflow parameters in any text field using Jinja syntax — for example, `{{parameter_key}}`.
 
-### Workflow parameters
+### Defining and using workflow parameters
 
-Parameters are reusable inputs you define once and reference across blocks. The **parameters panel** (accessible from the header) lists all parameters for the workflow. Parameter types include plain workflow parameters (filled in at run time), AWS Secrets, Bitwarden credentials, 1Password items, Azure Vault credentials, and custom credential service entries.
+Parameters are reusable inputs you define once and reference across any block. Open the **parameters panel** from the header to list, add, or remove parameters for the workflow. Parameter types include plain workflow parameters (filled in at run time), AWS Secrets, Bitwarden credentials, 1Password items, Azure Vault credentials, and custom credential service entries.
 
-When a parameter is in scope, you can reference it in any block's text field using `{{parameter_key}}`. The editor shows which blocks reference a given parameter, and deleting a parameter warns you about affected blocks.
+The editor shows which blocks reference a given parameter. Deleting a parameter warns you about every affected block before proceeding.
 
 ### Running a workflow
 
-Clicking the play button in the editor, or clicking **Run** from the workflow list, takes you to a parameters form (`/workflows/:workflowPermanentId/run`). This form shows every workflow-type parameter with a text field. Fill in the values and submit to start a run.
+Clicking the play button in the editor, or clicking **Run** from the workflow list, opens a parameters form at `/workflows/:workflowPermanentId/run`. Fill in a value for each workflow-type parameter and submit to start a run. Advanced options on the same form include proxy location, max screenshot scrolls, webhook callback URL, extra HTTP headers, and run engine selection.
 
-Advanced run options (available from the same form) include proxy location, max screenshot scrolls, webhook callback URL, extra HTTP headers, and run engine selection.
+### Iterating live with the debugger
 
-### The debugger view
+The debugger (`/workflows/:workflowPermanentId/build`) combines the canvas with live output so you can watch a workflow execute without leaving the editor. As blocks run, their outputs appear inline on the nodes. This is the fastest way to iterate on a workflow: submit a run, see exactly which block produced what output, and edit immediately.
 
-The debugger (`/workflows/:workflowPermanentId/build`) is a read-alongside-run view that combines the canvas with live output. As blocks execute, their outputs appear inline on the nodes. This is useful for building and iterating on a workflow while watching it run, rather than having to switch between the editor and the run detail page.
+### Inspecting a workflow run
 
-### Workflow run detail
+Each run at `/workflows/:workflowPermanentId/:workflowRunId` has its own detail view with five tabs.
 
-Each run at `/workflows/:workflowPermanentId/:workflowRunId` has its own detail view with:
+**Overview** shows a live browser stream while the workflow runs, then switches to a screenshot view afterward. A timeline on the left lists every block and action in execution order; clicking any item jumps the screenshot to that moment.
 
-**Overview**: a live browser stream while the workflow runs, switching to a screenshot view afterward. A timeline on the left lists every block and action in execution order. Clicking an item in the timeline jumps the screenshot to that moment.
+**Output** shows extracted data and downloaded files from the run. Structured block output appears here as formatted JSON.
 
-**Output**: extracted data and downloaded files from the run. If a block produced structured output, it appears here as formatted JSON.
+**Code** is available when the workflow ran in `code` mode (the default for prompt-generated workflows). It shows the generated Python-equivalent script and lets you iterate by submitting fix instructions.
 
-**Code**: if the workflow was run in `code` mode (the default for prompt-generated workflows), this tab shows the generated Python-equivalent script and lets you iterate on it by submitting fix instructions.
+**Recording** is a full video playback of the browser session.
 
-**Recording**: a video playback of the full session.
-
-**Parameters**: the input values that were used for this run.
+**Parameters** shows the exact input values used for this run — useful when you need to reproduce or audit a specific execution.
 
 ---
 
 ## Runs: Unified History
 
-The Runs page (`/runs`) shows every task run and workflow run in a single table, regardless of which section created them. You can filter by status (`created`, `running`, `failed`, `terminated`, `completed`, `queued`, `timed_out`, `canceled`, `paused`) and by trigger type (manual, scheduled, API).
+The Runs page (`/runs`) shows every task run and workflow run in a single table, regardless of which section created them. This is the fastest way to get a cross-account view of what's running, what's failed, and what's queued.
 
-Clicking any row navigates to that run's detail page. The `RunRouter` component at `/runs/:runId/*` automatically redirects to the correct detail view, whether the run is a task or a workflow run.
+You can filter by status — `created`, `running`, `failed`, `terminated`, `completed`, `queued`, `timed_out`, `canceled`, or `paused` — and by trigger type (manual, scheduled, or API). Clicking any row navigates to that run's detail page, whether the run is a task or a workflow run.
 
 Search works on both run IDs and parameter values. When a search term matches a workflow parameter, the matching parameter row expands inline without requiring a separate page load.
 
@@ -154,66 +166,58 @@ Search works on both run IDs and parameter values. When a search term matches a 
 
 ## Schedules
 
-The Schedules page (`/schedules`) lists all cron-based workflow schedules across your organization. Each schedule shows the workflow name, a human-readable description of the cron expression (for example, "Every Monday at 9 AM"), its enabled/paused state, and the last/next run times.
+The Schedules page (`/schedules`) lists all cron-based workflow schedules across your organization. Each row shows the workflow name, a human-readable description of the cron expression (for example, "Every Monday at 9 AM"), the enabled/paused state, and the last and next run times.
 
-From this page you can create a new schedule, enable or disable individual schedules, duplicate a schedule, and delete one or more. Bulk operations have a concurrency limit built in to avoid overwhelming the API.
+From this page you can create a new schedule, enable or disable individual schedules, duplicate a schedule, and delete one or more. Bulk operations have a built-in concurrency limit to avoid overwhelming the API.
 
-You can also manage schedules from within a workflow's editor by clicking the clock icon in the editor toolbar. That opens the schedule panel for that specific workflow, where you create cron schedules and see which are currently active.
+You can also manage schedules from within any workflow's editor by clicking the clock icon in the toolbar. That opens the schedule panel scoped to that workflow, where you can create cron schedules and see which are currently active.
 
 ---
 
 ## Credentials
 
-The Credentials page (`/credentials`) is where you store sensitive values that workflows need to log into sites or fill out forms. It has four tabs:
+The Credentials page (`/credentials`) is where you store sensitive values that workflows need to log into sites or fill out forms. It has four tabs.
 
-**Passwords**: stores username/password pairs. Each credential is tested in the background when first saved. You can add, edit, and delete credentials from this tab.
+**Passwords** stores username/password pairs. Each credential is tested in the background when first saved. You can add, edit, and delete credentials from this tab. Note that password and credit card credentials require a Bitwarden-compatible credential service to be configured in Settings.
 
-**Credit Cards**: stores card numbers, expiry dates, and billing details for use in checkout flows.
+**Credit Cards** stores card numbers, expiry dates, and billing details for use in checkout flows.
 
-**Secrets**: stores arbitrary secret values (API keys, tokens, etc.) that blocks can reference by name.
+**Secrets** stores arbitrary secret values — API keys, tokens, and similar — that blocks can reference by name.
 
-**2FA**: shows incoming TOTP codes. When a workflow encounters a 2FA challenge, Skyvern looks up a code here by the `totp_identifier` field. The tab lets you filter codes by identifier and OTP type, and shows when each code was received.
-
-Adding a credential uses a dropdown that opens the appropriate modal (Password, Credit Card, or Secret). Credentials for passwords and credit cards require a Bitwarden-compatible credential service to be configured on the backend.
+**2FA** shows incoming TOTP codes. When a workflow encounters a 2FA challenge, Skyvern looks up the matching code by the `totp_identifier` field you supply on a task or workflow parameter. The tab lets you filter codes by identifier and OTP type, and shows when each code was received.
 
 ---
 
 ## Browser Sessions
 
-Browser Sessions (`/browser-sessions`) are persistent, reusable browser instances. Unlike a normal task run where a fresh browser starts and closes, a browser session keeps the browser alive between runs. This means cookies, local storage, and login state persist, which is useful for sites that require complex authentication flows or where you want to maintain a logged-in state across multiple workflows.
+Browser Sessions (`/browser-sessions`) are persistent, reusable browser instances. Unlike a normal task run — where a fresh browser starts and closes when the task finishes — a browser session keeps the browser alive between runs. Cookies, local storage, and login state all persist, which is particularly useful for sites with complex authentication flows or when you want to stay logged in across multiple workflows.
 
-From this page you can:
+To create a session, choose the browser type (Chrome or Microsoft Edge), optionally enable extensions (ad blocker, captcha solver), set a proxy location, and give the session a label. Once the session is open, you can click into it for a real-time view of the browser and interact with it directly.
 
-- **Create a session**: choose the browser type (Chrome or Microsoft Edge), enable extensions (ad blocker, captcha solver), set a proxy location, and give the session a label
-- **View session status**: whether it's open or closed, when it was started, how long it's been running
-- **Open a live stream**: click into a session to see a real-time view of the browser and interact with it directly
-- **Copy the session ID**: paste it into the CDP address field of a task to attach that task to this session
-- **Stop or delete sessions**: from the row actions menu
-
-Sessions are identified by a UUID. Attaching a task to a session passes its `browser_session_id` and the task runs inside that browser's existing context rather than a fresh one.
+Sessions are identified by a UUID. To attach a task to a session, copy the session ID and paste it into the CDP address field of the task. The task then runs inside that browser's existing context — with all its cookies and saved state — rather than starting fresh. You can stop or delete sessions at any time from the row actions menu.
 
 ---
 
-## Settings
+## Settings: Configure API Keys and Integrations
 
-The Settings page (`/settings`) has several cards:
+The Settings page (`/settings`) is where you connect Skyvern to external credential stores and manage your API access. Each card on the page corresponds to an integration.
 
-**Settings**: select the active environment (local, staging, production) and organization.
+**Settings** lets you select the active environment (local, staging, or production) and organization.
 
-**API Key**: shows the currently active API key in a masked copyable field. This is the key you use to authenticate SDK and REST API calls.
+**API Key** shows the currently active API key in a masked, copyable field. This is the key you use to authenticate SDK and REST API calls.
 
-**1Password Integration**: enter a 1Password service account token to enable workflows to pull credentials directly from your 1Password vault via workflow parameters.
+**1Password Integration** accepts a 1Password service account token, which lets workflows pull credentials directly from your 1Password vault via workflow parameters.
 
-**Bitwarden Integration**: configure Bitwarden account credentials so workflows can authenticate against a self-hosted or cloud Bitwarden vault.
+**Bitwarden Integration** takes your Bitwarden account credentials and connects Skyvern to a self-hosted or cloud Bitwarden vault — required if you want to use the Passwords or Credit Cards tabs in Credentials.
 
-**Azure Key Vault**: configure an Azure service principal so workflows can read secrets from Azure Key Vault.
+**Azure Key Vault** takes an Azure service principal configuration so workflows can read secrets from Azure Key Vault.
 
-**Custom Credential Service**: point Skyvern at a custom HTTP endpoint that returns credentials, for cases where credentials live in an internal system that isn't Bitwarden or Azure.
+**Custom Credential Service** accepts a custom HTTP endpoint URL. Skyvern will call that endpoint to retrieve credentials, which covers cases where your credentials live in an internal system that isn't Bitwarden or Azure.
 
 ---
 
 ## How the UI Connects to the API
 
-Everything the UI does goes through the same REST API that the Python SDK and direct HTTP clients use. The "Copy API Command" button in task and workflow detail views shows the exact `curl` command or SDK call that would reproduce a given run. This makes it straightforward to start building visually and then migrate to programmatic execution when you need it.
+Everything the UI does goes through the same REST API that the Python SDK and direct HTTP clients use. The **Copy API Command** button in task and workflow detail views shows the exact `curl` command or SDK call that would reproduce a given run. This makes it straightforward to start building visually and then migrate to programmatic execution when you need it.
 
 Status values, proxy locations, block types, and parameter references are identical between the UI and the API, so the concepts transfer directly. A workflow you build in the editor exports cleanly to JSON or YAML for version control or import into another environment.
