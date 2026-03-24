@@ -93,7 +93,7 @@ The `engine` field controls which agent handles the task:
 - **`anthropic-cua`**: Uses Anthropic Claude Sonnet 3.7 with computer use.
 - **`ui-tars`**: Uses the UI-TARS model.
 
-**Response** — `TaskRunResponse`
+**Response** (`TaskRunResponse`)
 
 ```json
 {
@@ -163,7 +163,7 @@ const run = await skyvern.runWorkflow({
 | `browser_address` | `string \| null` | `null` | CDP address of a custom browser. |
 | `ai_fallback` | `boolean \| null` | `null` | If `true`, falls back to AI agent if code execution fails. |
 
-**Response** — `WorkflowRunResponse`
+**Response** (`WorkflowRunResponse`)
 
 ```json
 {
@@ -186,7 +186,7 @@ const run = await skyvern.runWorkflow({
 
 `GET /v1/runs/{run_id}`
 
-Polls the current state of any run — task or workflow. The `run_id` is whatever was returned by `run_task` or `run_workflow`.
+Polls the current state of any run (task or workflow). The `run_id` is whatever was returned by `run_task` or `run_workflow`.
 
 ```python
 from skyvern import Skyvern
@@ -216,7 +216,7 @@ A run moves through these states:
 
 Once a run is in `completed`, `failed`, `timed_out`, `terminated`, or `canceled` it will not change again.
 
-**Response** — `RunResponse` (either `TaskRunResponse` or `WorkflowRunResponse` based on `run_type`)
+**Response** (`RunResponse`, either `TaskRunResponse` or `WorkflowRunResponse` based on `run_type`)
 
 ```json
 {
@@ -292,7 +292,7 @@ for a in artifacts:
 | `browser_console_log` | Browser console output |
 | `skyvern_log` | Skyvern agent logs |
 
-**Response** — `Artifact[]`
+**Response** (`Artifact[]`)
 
 ```json
 [
