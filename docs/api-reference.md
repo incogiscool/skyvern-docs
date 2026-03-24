@@ -287,7 +287,7 @@ await skyvern.cancel_run(run_id="tsk_v2_abc123")
 await skyvern.cancelRun("tsk_v2_abc123");
 ```
 
-Returns `204 No Content` on success.
+Returns `200` with an empty body on success.
 
 ---
 
@@ -652,8 +652,10 @@ await skyvern.send_totp_code(
 |---|---|---|---|
 | `totp_identifier` | `string` | yes | The identifier you set on the task/workflow (email, phone, or custom string). |
 | `content` | `string` | yes | The full message containing the code. Skyvern extracts the numeric code automatically. |
+| `type` | `string \| null` | no | Force extraction of a specific OTP kind: `"totp"` or `"magic_link"`. If omitted, Skyvern infers the type. |
 | `task_id` | `string \| null` | no | Scopes the code to a specific task run. |
 | `workflow_run_id` | `string \| null` | no | Scopes the code to a specific workflow run. |
+| `workflow_id` | `string \| null` | no | Scopes the code to a specific workflow (permanent ID, starts with `wpid_`). |
 | `source` | `string \| null` | no | Where the code came from: `"email"`, `"sms"`, etc. |
 | `expired_at` | `datetime \| null` | no | When this code expires. |
 
@@ -770,6 +772,16 @@ The `proxy_location` parameter is available on tasks, workflow runs, and browser
 | `RESIDENTIAL_IT` | Italy |
 | `RESIDENTIAL_NL` | Netherlands |
 | `RESIDENTIAL_KR` | South Korea |
+| `US-CA` | California, US — deprecated, routes through `RESIDENTIAL_ISP` |
+| `US-NY` | New York, US — deprecated, routes through `RESIDENTIAL_ISP` |
+| `US-TX` | Texas, US — deprecated, routes through `RESIDENTIAL_ISP` |
+| `US-FL` | Florida, US — deprecated, routes through `RESIDENTIAL_ISP` |
+| `US-WA` | Washington, US — deprecated, routes through `RESIDENTIAL_ISP` |
+| `RESIDENTIAL_NZ` | New Zealand |
+| `RESIDENTIAL_ZA` | South Africa |
+| `RESIDENTIAL_AR` | Argentina |
+| `RESIDENTIAL_TR` | Turkey |
+| `RESIDENTIAL_PH` | Philippines |
 | `RESIDENTIAL_ISP` | ISP proxy (US) |
 | `NONE` | No proxy — browser uses the server's network directly. |
 
