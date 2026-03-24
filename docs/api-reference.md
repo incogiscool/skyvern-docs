@@ -75,7 +75,7 @@ const run = await skyvern.runTask({
 });
 ```
 
-**Request body**
+**Request body — core**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
@@ -88,8 +88,18 @@ const run = await skyvern.runTask({
 | `error_code_mapping` | `object \| null` | `null` | Map your own error codes to conditions. Example: `{"login_failed": "The credentials are incorrect"}`. |
 | `webhook_url` | `string \| null` | `null` | URL to POST a completion notification to when the run finishes. |
 | `proxy_location` | `string \| object \| null` | `"RESIDENTIAL"` | Geographic proxy to route browser traffic through. See [proxy locations](#proxy-locations). |
+
+**Request body — 2FA / TOTP**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
 | `totp_identifier` | `string \| null` | `null` | Identifier used to match incoming TOTP/2FA codes pushed via the [Send TOTP code](#send-totp-code) endpoint. |
 | `totp_url` | `string \| null` | `null` | URL Skyvern polls to fetch TOTP/2FA codes. |
+
+**Request body — advanced**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
 | `browser_session_id` | `string \| null` | `null` | Run inside an existing persistent browser session (continues from the current screen state). |
 | `publish_workflow` | `boolean` | `false` | When `true` with `skyvern-2.0`, saves a successful task as a reusable workflow. |
 | `extra_http_headers` | `object \| null` | `null` | Additional HTTP headers injected into all browser requests during the run. |
